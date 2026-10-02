@@ -86,11 +86,33 @@
             </tfoot>
         </table>
 
-        <form action="https://www.google.com/search" method="GET">    
+        <form action="https://www.google.com/search">   
             <label for="busca">Termo de busca</label>
             <input type="text" id="busca" placeholder="Pato.." name="q" ><br>
             <input type="submit" value="Pesquisar">
         </form>
+
+        <canvas height="1000px" width="600px" id="canvas">
+
+        </canvas>
+
+        <script>
+            // declarar variavel em js
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            let desenhado = false;
+
+            canvas.addEventListener("mousedown", )
+            
+            canvas.addEventListener("mousemove", (e)=>{
+                console.log(e);
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, offsetY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            })
+        </script>
+
     </div>
 
     <br>
