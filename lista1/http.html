@@ -1,11 +1,353 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTTP</title>
+    <title>HTTP na Prática</title>
 </head>
+
 <body>
-    
+
+    <header>
+        <h1>HTTP na Prática: Requisição e Resposta</h1>
+
+        <nav>
+            <a href="index.html">Voltar para Home</a> |
+            <a href="historia_web.html">História da Web</a>|
+            <a href="estados.html">Estados</a> |
+            <a href="curriculo.html">Currículo</a> |
+            <a href="contato.html">Contato</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+
+        <div>
+            <h2>O que é HTTP?</h2>
+
+            <p>
+                <strong>HTTP</strong> significa
+                <em>Hypertext Transfer Protocol</em>, ou Protocolo de Transferência
+                de Hipertexto. Ele é um protocolo utilizado para realizar a
+                comunicação entre <strong>clientes</strong> e
+                <strong>servidores</strong> na Web.
+            </p>
+
+            <p>
+                Quando uma pessoa acessa um site pelo navegador, o navegador envia
+                uma <strong>requisição HTTP</strong> para um servidor. O servidor
+                processa essa solicitação e envia de volta uma
+                <strong>resposta HTTP</strong>.
+            </p>
+
+            <p>
+                Portanto, podemos representar a comunicação da seguinte maneira:
+            </p>
+
+            <p>
+                <mark>Navegador → Requisição HTTP → Servidor</mark>
+            </p>
+
+            <p>
+                <mark>Servidor → Resposta HTTP → Navegador</mark>
+            </p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Cliente e servidor</h2>
+
+            <h3>Cliente</h3>
+
+            <p>
+                O <strong>cliente</strong> é o dispositivo ou programa que solicita
+                algum recurso de um servidor. Na Web, um exemplo de cliente é o
+                navegador, como Chrome, Firefox, Edge ou Safari.
+            </p>
+
+            <h3>Servidor</h3>
+
+            <p>
+                O <strong>servidor</strong> é o computador ou sistema responsável
+                por receber as requisições e fornecer os recursos solicitados.
+                Esses recursos podem ser páginas HTML, imagens, arquivos ou dados.
+            </p>
+
+            <h3>Requisição</h3>
+
+            <p>
+                A <strong>requisição HTTP</strong> é uma mensagem enviada pelo
+                cliente ao servidor solicitando uma ação ou recurso.
+            </p>
+
+            <h3>Resposta</h3>
+
+            <p>
+                A <strong>resposta HTTP</strong> é a mensagem enviada pelo servidor
+                de volta ao cliente após o processamento da requisição.
+            </p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Como funciona uma comunicação HTTP?</h2>
+
+            <ol>
+                <li>O usuário digita o endereço de um site no navegador.</li>
+                <li>O navegador identifica o servidor responsável pelo site.</li>
+                <li>O navegador envia uma requisição HTTP.</li>
+                <li>O servidor recebe e processa a requisição.</li>
+                <li>O servidor envia uma resposta HTTP.</li>
+                <li>O navegador interpreta a resposta e apresenta o conteúdo ao usuário.</li>
+            </ol>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Métodos HTTP</h2>
+
+            <p>
+                Os métodos HTTP indicam qual ação o cliente deseja realizar
+                sobre determinado recurso.
+            </p>
+
+            <h3>Método GET</h3>
+
+            <p>
+                O método <strong>GET</strong> é utilizado principalmente para
+                <strong>solicitar dados</strong> de um servidor.
+            </p>
+
+            <p>
+                Por exemplo, quando o usuário acessa:
+            </p>
+
+            <pre>
+GET /index.html HTTP/1.1
+Host: www.exemplo.com
+            </pre>
+
+            <p>
+                O navegador está solicitando ao servidor o arquivo
+                <strong>index.html</strong>.
+            </p>
+
+            <h3>Método POST</h3>
+
+            <p>
+                O método <strong>POST</strong> é utilizado para enviar dados
+                ao servidor. É comum em formulários, cadastros, logins e
+                outras operações que precisam enviar informações.
+            </p>
+
+            <p>
+                Por exemplo, um formulário de cadastro pode enviar nome e
+                e-mail através de uma requisição POST.
+            </p>
+
+            <pre>
+POST /cadastro HTTP/1.1
+Host: www.exemplo.com
+Content-Type: application/x-www-form-urlencoded
+
+nome=Joao&amp;email=joao@exemplo.com
+            </pre>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Exemplo de uma requisição HTTP</h2>
+
+            <p>
+                Abaixo temos um exemplo simplificado de uma requisição HTTP
+                utilizando o método GET:
+            </p>
+
+            <pre>
+GET /produtos.html HTTP/1.1
+Host: www.exemplo.com
+User-Agent: Mozilla/5.0
+Accept: text/html
+            </pre>
+
+            <p>
+                Nesse exemplo:
+            </p>
+
+            <ul>
+                <li><strong>GET:</strong> indica o método utilizado.</li>
+                <li><strong>/produtos.html:</strong> é o recurso solicitado.</li>
+                <li><strong>HTTP/1.1:</strong> indica a versão do protocolo.</li>
+                <li><strong>Host:</strong> informa o servidor que está sendo acessado.</li>
+                <li><strong>User-Agent:</strong> informa características do cliente.</li>
+                <li><strong>Accept:</strong> indica o tipo de conteúdo aceito pelo cliente.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Exemplo de uma resposta HTTP</h2>
+
+            <p>
+                Depois de receber e processar a requisição, o servidor pode
+                responder da seguinte forma:
+            </p>
+
+            <pre>
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 125
+
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Olá!&lt;/h1&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+
+            <p>
+                Nesse exemplo, o código <strong>200</strong> informa que a
+                requisição foi processada com sucesso. O servidor também informa
+                que o conteúdo retornado é um documento HTML.
+            </p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Códigos de status HTTP</h2>
+
+            <p>
+                Os códigos de status HTTP são números enviados pelo servidor
+                para informar o resultado de uma requisição.
+            </p>
+
+            <table border="1">
+                <caption>Principais códigos de status HTTP</caption>
+
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Significado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>200</td>
+                        <td>OK</td>
+                        <td>
+                            A requisição foi processada com sucesso e o servidor
+                            conseguiu fornecer o recurso solicitado.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>301</td>
+                        <td>Moved Permanently</td>
+                        <td>
+                            O recurso foi movido permanentemente para outra URL.
+                            O cliente pode ser direcionado para o novo endereço.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>302</td>
+                        <td>Found</td>
+                        <td>
+                            Indica um redirecionamento temporário para outro endereço.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>400</td>
+                        <td>Bad Request</td>
+                        <td>
+                            O servidor não conseguiu entender ou processar
+                            corretamente a requisição enviada pelo cliente.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>403</td>
+                        <td>Forbidden</td>
+                        <td>
+                            O servidor entendeu a requisição, mas não permite
+                            o acesso ao recurso solicitado.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>404</td>
+                        <td>Not Found</td>
+                        <td>
+                            O servidor não encontrou o recurso solicitado.
+                            É comum quando uma página não existe ou foi removida.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>500</td>
+                        <td>Internal Server Error</td>
+                        <td>
+                            Ocorreu um erro interno no servidor ao tentar
+                            processar a requisição.
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            Os códigos HTTP ajudam o cliente a entender o resultado
+                            de uma requisição.
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Resumo</h2>
+
+            <p>
+                O HTTP é fundamental para o funcionamento da Web. Ele define
+                como clientes e servidores trocam informações através de
+                requisições e respostas.
+            </p>
+
+            <ul>
+                <li><strong>Cliente:</strong> solicita recursos.</li>
+                <li><strong>Servidor:</strong> fornece recursos e processa solicitações.</li>
+                <li><strong>Requisição:</strong> mensagem enviada pelo cliente.</li>
+                <li><strong>Resposta:</strong> mensagem retornada pelo servidor.</li>
+                <li><strong>GET:</strong> normalmente utilizado para obter dados.</li>
+                <li><strong>POST:</strong> normalmente utilizado para enviar dados.</li>
+                <li><strong>Status HTTP:</strong> informa o resultado da requisição.</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>
+            <em>Atividade 3 – HTTP na prática: requisição e resposta</em>
+        </p>
+    </footer>
+
 </body>
+
 </html>
