@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Regra CSS */
+        *{
+            border: 1px solid ;
+        }
+        p{
+            font-size: 15pt;
+            color: rgba(240, 10, 10, 0.61);
+            background-color: #ebf708;
+        }
+        h1{
+            font-size: 4em;
+
+        }
+        #itemID{
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .categoria{
+            background-color: #92b5dd52;
+        }
+
+        div span{
+            font-style: oblique;
+        }
+
+        div mark{
+            background-color: blue;
+        }
+
+
+        div>mark{
+            background-color: gray;
+        }
+
+        li:hover{ color: coral; }
+
+        p:first-child {
+            font-size: 2em;
+        }
+
+        /*
+        * 1 Byte = 8bits
+        * rgb = 1B, 1B, 1B = 24bit de profundidade;
+        */
+    </style>
+
+</head>
+<body>
+    <h1>CSS</h1>
+    <p style="color: blueviolet;">Css é uma linguagem declarativa auxíliar a documentos html para estilização de definição de comportamento. O css pode ser declarado de três formas distintas.</p>
+    <ol>
+        <li class="categoria">Ná tag style, definida no cabeçario do HTML;</li>
+        <li class="categoria">Em um documento externo por meio da tag link;</li>
+        <li class="categoria">Inline no proprio elemento HTML</li>
+    </ol>
+
+    <div>
+        <p>CSS possui diversas formas de selecionar em quais elementos html uma regra será aplicado</p>
+        <span>Seletores:</span>
+        <ul>
+            <li>seletor por elemento.</li>
+            <li>* seleor univesal.</li>
+            <li id="itemID"># id identificador unico.</li>
+            <li>.classe ou categoria</li>
+            <li>" " seletor por descente <span>A</span> <mark>B</mark></li>
+            <li> ">" seletor para filho direto </li>
+        </ul>
+        <mark>B</mark>
+    </div>
+</body>
+</html>
