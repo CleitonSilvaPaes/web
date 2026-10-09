@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            border: 1px solid black;
+        }
+        .conteiner{
+            height: 300px;
+            position: relative;
+        }
+        .box{
+            height: 50px;
+            width: 50px;
+            display: inline-block;
+        }
+        #box1{
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            background-color: yellow;
+        }
+
+        #box2{
+            position: fixed;
+            right: 0px;
+            top: 0px;
+            background-color: green;
+        }
+
+        #box3{
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+            background-color: black;
+        }
+
+        
+        #box4{
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            background-color: red;
+        }
+
+        #box5{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            background-color: grey;
+            transform: translate(-50% -50%);
+        }
+
+    </style>
+
+</head>
+<body>
+    <h1>Positions</h1>
+    <div class="conteiner">
+        <div class="box" id="box1">box-1</div>
+        <div class="box" id="box2">box-2</div>
+        <div class="box" id="box3">box-3</div>
+        <div class="box" id="box4">box-4</div>
+        <div class="box" id="box5">box-5</div>
+    </div>
+</body>
+</html>
