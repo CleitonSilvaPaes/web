@@ -1,0 +1,25 @@
+CSS - é uma folha de estilo em cascata
+E nela que definimos a aparência da nossa página HTML
+
+Para selecioniar um ou mais elementos no HTML é definido seletor e uma regra que será aplicado.
+
+Exemplo: 
+
+h1 { -- seletor 
+	color: red; -- definido a cor 
+	font-size: 2em; -- definido o tamanho da letra
+}
+
+O significado de "cascata", e que a ultima regra definida para o mesmo elemento será aplicada
+
+Exemplo:
+
+h1 {
+    color: red;
+    font-size: 2em;
+}
+
+h1 {
+    color: green; -- o navegador aplicará essa regra
+}
+

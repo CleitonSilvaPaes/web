@@ -1,0 +1,61 @@
+1. CSS Externo
+É a forma mais recomendada e utilizada na prática. As regras de CSS são salvas em um arquivo separado com a extensão .css (por exemplo, estilo.css) e vinculadas ao documento HTML usando a tag <link> dentro da seção <head>.
+
+Vantagens: Separa o conteúdo da apresentação e permite aplicar as mesmas regras de design a várias páginas do site simultaneamente.
+
+HTML
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo de CSS Externo</title>
+    <!-- Vinculação do arquivo CSS externo -->
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <h1>Título Principal</h1>
+</body>
+</html>
+2. CSS Interno
+As regras de estilo são definidas diretamente no próprio arquivo HTML, agrupadas dentro da tag <style>, que normalmente fica alocada dentro do cabeçalho <head>.
+
+Vantagens: Útil quando uma página precisa de estilos exclusivos que não serão reaproveitados em nenhuma outra página do site.
+
+HTML
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo de CSS Interno</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: darkblue;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Título Principal</h1>
+</body>
+</html>
+3. CSS Em Linha (Inline)
+O estilo é aplicado diretamente na tag HTML que você deseja estilizar, através do atributo global style.
+
+Desvantagens: Mistura código HTML com design visual, dificulta a manutenção e não promove o reaproveitamento de regras. É recomendado apenas para testes rápidos ou regras muito pontuais.
+
+HTML
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo de CSS Inline</title>
+</head>
+<body>
+    <!-- Estilo aplicado diretamente no elemento -->
+    <h1 style="color: crimson; font-size: 24px;">Título com CSS Inline</h1>
+    <p style="background-color: yellow;">Parágrafo destacado diretamente na tag.</p>
+</body>
+</html>
