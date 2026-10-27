@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 6c - Display e Positions (5 Caixas)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        /* Estilo base de todas as caixas */
+        .box {
+            width: 130px;
+            height: 130px;
+            position: absolute;
+            font-size: 16px;
+            color: #000;
+            padding: 6px 10px;
+        }
+
+        /* box1: Canto Superior Esquerdo */
+        #box1 {
+            top: 0;
+            left: 0;
+            background-color: #ff0000; /* Vermelho */
+        }
+
+        /* box2: Canto Superior Direito */
+        #box2 {
+            top: 0;
+            right: 0;
+            background-color: #ffff00; /* Amarelo */
+        }
+
+        /* box3: Canto Inferior Direito */
+        #box3 {
+            bottom: 0;
+            right: 0;
+            background-color: #008000; /* Verde */
+        }
+
+        /* box4: Canto Inferior Esquerdo */
+        #box4 {
+            bottom: 0;
+            left: 0;
+            background-color: #0000ff; /* Azul */
+        }
+
+        /* box5: Centro Exato */
+        #box5 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ff00ff; /* Magenta / Rosa Choque */
+        }
+
+        /* Botão para exibir explicação */
+        .btn-info {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 100;
+            transition: background 0.2s;
+        }
+
+        .btn-info:hover {
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        /* Modal / Caixa de explicação */
+        .modal-explicacao {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            max-width: 620px;
+            width: 90%;
+            z-index: 200;
+            font-family: 'Segoe UI', sans-serif;
+            border: 1px solid #cbd5e1;
+        }
+
+        .modal-explicacao:target {
+            display: block;
+        }
+
+        .modal-explicacao h3 {
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        .modal-explicacao p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .fechar-modal {
+            display: inline-block;
+            margin-top: 10px;
+            background: #2563eb;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <a href="#explicacao" class="btn-info">ℹ️ Explicação 6c</a>
+
+    <div id="box1" class="box">box1</div>
+    <div id="box2" class="box">box2</div>
+    <div id="box5" class="box">box5</div>
+    <div id="box4" class="box">box4</div>
+    <div id="box3" class="box">box3</div>
+
+    <div id="explicacao" class="modal-explicacao">
+        <h3>Por que a exibição é assim? (Atividade 6c)</h3>
+        <p>
+            Neste exercício, é aplicado o modelo de <strong>Posicionamento Absoluto</strong> (<code>position: absolute</code>).
+        </p>
+        <p>
+            Quando um elemento recebe <code>position: absolute</code>, ele é completamente removido do fluxo de renderização normal do documento, permitindo que outros elementos ocupem o seu espaço original sem colisões.
+        </p>
+        <p>
+            Suas coordenadas são determinadas em relação ao seu ancestral posicionado mais próximo (ou ao <code>&lt;body&gt;</code>/viewport):
+        </p>
+        <ul style="margin-left: 20px; font-size: 13px; line-height: 1.6; color: #475569; margin-bottom: 10px;">
+            <li><strong>box1:</strong> <code>top: 0; left: 0;</code> fixa a caixa no canto superior esquerdo.</li>
+            <li><strong>box2:</strong> <code>top: 0; right: 0;</code> fixa a caixa no canto superior direito.</li>
+            <li><strong>box3:</strong> <code>bottom: 0; right: 0;</code> fixa a caixa no canto inferior direito.</li>
+            <li><strong>box4:</strong> <code>bottom: 0; left: 0;</code> fixa a caixa no canto inferior esquerdo.</li>
+            <li><strong>box5:</strong> <code>top: 50%; left: 50%; transform: translate(-50%, -50%);</code> move o ponto inicial para a metade da tela e recua 50% de sua própria dimensão, centralizando-a com precisão geométrica.</li>
+        </ul>
+        <a href="#" class="fechar-modal">Fechar Explicação</a>
+    </div>
+</body>
+</html>

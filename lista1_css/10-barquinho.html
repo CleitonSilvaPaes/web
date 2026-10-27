@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 10 - Animação de Barquinho no Mar com CSS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .nav-voltar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #1e3a8a;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+
+        .nav-voltar:hover {
+            background: #ffffff;
+            transform: scale(1.05);
+        }
+
+        /* ======================================================== */
+        /* CENÁRIO PRINCIPAL: Céu com linear-gradient conforme guia */
+        /* ======================================================== */
+        .cenario {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, #ffffff 0%, #e0f2fe 35%, #bae6fd 65%);
+            overflow: hidden;
+        }
+
+        /* ======================================================== */
+        /* NUVENS ANIMADAS: border-radius + box-shadow              */
+        /* ======================================================== */
+        .nuvem {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50px;
+            opacity: 0.95;
+            z-index: 2;
+        }
+
+        /* Nuvem 1 (Principal) */
+        .nuvem-1 {
+            width: 170px;
+            height: 55px;
+            top: 18%;
+            left: -200px;
+            box-shadow: 25px -15px 0 10px #ffffff, 
+                        70px -25px 0 20px #ffffff, 
+                        110px -10px 0 8px #ffffff;
+            animation: moverNuvem 28s linear infinite;
+        }
+
+        /* Nuvem 2 (Secundária) */
+        .nuvem-2 {
+            width: 140px;
+            height: 45px;
+            top: 32%;
+            left: -250px;
+            opacity: 0.8;
+            box-shadow: 20px -12px 0 8px #ffffff, 
+                        60px -20px 0 15px #ffffff, 
+                        90px -8px 0 6px #ffffff;
+            animation: moverNuvem 42s linear infinite;
+            animation-delay: -15s;
+        }
+
+        @keyframes moverNuvem {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(100vw + 350px));
+            }
+        }
+
+        /* ======================================================== */
+        /* BARQUINHO: wrapper para translação + balanço com keyframe */
+        /* ======================================================== */
+        .barco-wrapper {
+            position: absolute;
+            bottom: 27%;
+            left: -150px;
+            z-index: 20; /* Barco à frente do mar de fundo */
+            animation: navegarHorizontal 18s linear infinite;
+        }
+
+        .barco {
+            width: 105px;
+            height: 100px;
+            background-image: url('img/barco.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: balancoBarco 2.4s ease-in-out infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        /* Caso a imagem não carregue, barco em CSS de fallback */
+        .barco-fallback {
+            display: none;
+        }
+
+        /* Movimento da esquerda para a direita em loop contínuo */
+        @keyframes navegarHorizontal {
+            0% {
+                left: -130px;
+            }
+            100% {
+                left: calc(100vw + 130px);
+            }
+        }
+
+        /* Balanço suave (oscilação angular e vertical) */
+        @keyframes balancoBarco {
+            0% {
+                transform: rotate(-6deg) translateY(0);
+            }
+            50% {
+                transform: rotate(2deg) translateY(-7px);
+            }
+            100% {
+                transform: rotate(7deg) translateY(3px);
+            }
+        }
+
+        /* ======================================================== */
+        /* MAR ANIMADO: div.mar com pseudo-elementos e ondas        */
+        /* ======================================================== */
+        .mar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 32%;
+            background-color: #3b82f6; /* Azul base do mar */
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* Onda de fundo (pseudo-elemento ::before) */
+        .mar::before {
+            content: "";
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 200%;
+            height: 60px;
+            background: radial-gradient(circle at 50% 0%, transparent 22px, #3b82f6 23px);
+            background-size: 70px 50px;
+            z-index: 15;
+            animation: ondulacaoFundo 4s linear infinite alternate;
+        }
+
+        /* Onda da frente com cor ligeiramente mais escura (::after) */
+        .mar::after {
+            content: "";
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 200%;
+            height: 60px;
+            background: radial-gradient(circle at 50% 0%, transparent 25px, #2563eb 26px);
+            background-size: 85px 60px;
+            z-index: 25; /* Na frente do casco do barquinho para dar profundidade */
+            opacity: 0.9;
+            animation: ondulacaoFrente 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes ondulacaoFundo {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50px);
+            }
+        }
+
+        @keyframes ondulacaoFrente {
+            0% {
+                transform: translateX(-40px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-voltar">← Voltar à Lista</a>
+
+    <div class="cenario">
+        <!-- Nuvens construídas com border-radius e box-shadow -->
+        <div class="nuvem nuvem-1"></div>
+        <div class="nuvem nuvem-2"></div>
+
+        <!-- Barquinho animado (navegação horizontal + balanço) -->
+        <div class="barco-wrapper">
+            <div class="barco" id="meuBarco"></div>
+        </div>
+
+        <!-- Mar animado com pseudo-elementos ::before e ::after -->
+        <div class="mar"></div>
+    </div>
+</body>
+</html>

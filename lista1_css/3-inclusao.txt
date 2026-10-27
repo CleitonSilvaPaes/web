@@ -1,0 +1,30 @@
+==================================================
+Atividade 3 – Como podemos incluir CSS em documentos HTML?
+==================================================
+
+Podemos incluir CSS em documentos HTML de 3 formas principais:
+
+1. CSS EXTERNO (Recomendado)
+Vinculado ao documento através da tag <link> no <head>, referenciando um arquivo .css separado:
+Exemplo:
+<head>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+Vantagens: Separa estrutura e design, permite que o mesmo arquivo estilize várias páginas simultaneamente e aproveita cache de navegador.
+
+2. CSS INTERNO OU INCORPORADO
+Declarado diretamente dentro da tag <style> no <head> da própria página HTML:
+Exemplo:
+<head>
+    <style>
+        body { background-color: #f0f0f0; }
+        h1 { color: darkblue; }
+    </style>
+</head>
+Vantagens: Útil para páginas com estilos exclusivos que não serão reutilizados em outros arquivos.
+
+3. CSS EM LINHA (INLINE)
+Aplicado diretamente na tag HTML através do atributo global style:
+Exemplo:
+<h1 style="color: red; font-size: 24px;">Título</h1>
+Desvantagens: Mistura estrutura com apresentação, dificulta manutenção e não tem reaproveitamento. Usado geralmente em e-mails HTML ou testes rápidos.

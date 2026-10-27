@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 6b - Display em Colunas Horizontais (Side-by-Side)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #ffffff;
+        }
+
+        .container-colunas {
+            width: 100%;
+            height: 220px;
+        }
+
+        /* Cada coluna ocupa 25% da largura e fica alinhada lado a lado via float ou flex */
+        .coluna {
+            float: left;
+            width: 25%;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            color: #000;
+        }
+
+        .coluna-1 {
+            background-color: #5500ff; /* Roxo / Violeta */
+        }
+
+        .coluna-2 {
+            background-color: #009900; /* Verde */
+        }
+
+        .coluna-3 {
+            background-color: #ff0000; /* Vermelho */
+        }
+
+        .coluna-4 {
+            background-color: #ffff00; /* Amarelo */
+        }
+
+        /* Botão para exibir explicação */
+        .btn-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 100;
+            transition: background 0.2s;
+        }
+
+        .btn-info:hover {
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        /* Modal / Caixa de explicação */
+        .modal-explicacao {
+            display: none;
+            position: fixed;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 620px;
+            width: 90%;
+            z-index: 200;
+            font-family: 'Segoe UI', sans-serif;
+            border: 1px solid #e2e8f0;
+        }
+
+        .modal-explicacao:target {
+            display: block;
+        }
+
+        .modal-explicacao h3 {
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        .modal-explicacao p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .fechar-modal {
+            display: inline-block;
+            margin-top: 10px;
+            background: #2563eb;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <a href="#explicacao" class="btn-info">ℹ️ Explicação 6b</a>
+
+    <div class="container-colunas">
+        <div class="coluna coluna-1">1</div>
+        <div class="coluna coluna-2">2</div>
+        <div class="coluna coluna-3">3</div>
+        <div class="coluna coluna-4">4</div>
+    </div>
+
+    <div id="explicacao" class="modal-explicacao">
+        <h3>Por que a exibição é assim? (Atividade 6b)</h3>
+        <p>
+            Diferente do <strong>6a</strong> onde os elementos se empilhavam verticalmente, aqui utilizamos a propriedade <code>float: left</code> (ou alternativamente <code>display: inline-block</code> / <code>display: flex</code>) combinada com <code>width: 25%</code>.
+        </p>
+        <p>
+            O <code>float: left</code> retira o elemento do fluxo estrito de bloco e o encosta à esquerda, permitindo que os elementos seguintes fluam ao seu lado direito.
+        </p>
+        <p>
+            Como cada uma das quatro colunas possui exatamente <strong>25% de largura</strong> (4 x 25% = 100%), elas preenchem perfeitamente uma única linha horizontal no topo da página. O restante da janela abaixo permanece com o fundo padrão branco.
+        </p>
+        <a href="#" class="fechar-modal">Fechar Explicação</a>
+    </div>
+</body>
+</html>

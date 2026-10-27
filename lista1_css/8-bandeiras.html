@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 8 - Bandeiras com CSS Puro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-voltar:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #0f172a;
+            margin-bottom: 25px;
+        }
+
+        /* Menu de âncoras no início do documento conforme enunciado */
+        .menu-ancoras {
+            background: #ffffff;
+            padding: 18px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            margin-bottom: 40px;
+            position: sticky;
+            top: 15px;
+            z-index: 50;
+        }
+
+        .menu-ancoras a {
+            color: #1e293b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .menu-ancoras a:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        /* Card de cada país */
+        .pais-secao {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .pais-secao h2 {
+            font-size: 22px;
+            color: #334155;
+            margin-bottom: 20px;
+        }
+
+        /* ======================================================== */
+        /* CLASSE OBRIGATÓRIA: .bandeira para dimensões das bandeiras */
+        /* ======================================================== */
+        .bandeira {
+            width: 360px;
+            height: 240px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        /* -------------------------------------------------------- */
+        /* 1. JAPÃO: Fundo branco e círculo vermelho central        */
+        /* -------------------------------------------------------- */
+        #japao.bandeira {
+            background-color: #ffffff;
+        }
+
+        #japao.bandeira > div.circulo {
+            width: 130px;
+            height: 130px;
+            background-color: #bc002d;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* -------------------------------------------------------- */
+        /* 2. ALEMANHA: 3 Faixas Horizontais (Preto, Vermelho, Ouro)*/
+        /* -------------------------------------------------------- */
+        #alemanha.bandeira > div.faixa-preta {
+            width: 100%;
+            height: 33.333%;
+            background-color: #000000;
+        }
+
+        #alemanha.bandeira > div.faixa-vermelha {
+            width: 100%;
+            height: 33.333%;
+            background-color: #dd0000;
+        }
+
+        #alemanha.bandeira > div.faixa-amarela {
+            width: 100%;
+            height: 33.333%;
+            background-color: #ffce00;
+        }
+
+        /* -------------------------------------------------------- */
+        /* 3. HOLANDA: 3 Faixas Horizontais (Vermelho, Branco, Azul) */
+        /* -------------------------------------------------------- */
+        #holanda.bandeira > div.faixa-vermelha {
+            width: 100%;
+            height: 33.333%;
+            background-color: #ae1c28;
+        }
+
+        #holanda.bandeira > div.faixa-branca {
+            width: 100%;
+            height: 33.333%;
+            background-color: #ffffff;
+        }
+
+        #holanda.bandeira > div.faixa-azul {
+            width: 100%;
+            height: 33.333%;
+            background-color: #21468b;
+        }
+
+        /* -------------------------------------------------------- */
+        /* 4. ITÁLIA: 3 Faixas Verticais (Verde, Branco, Vermelho)   */
+        /* -------------------------------------------------------- */
+        #italia.bandeira {
+            display: flex;
+        }
+
+        #italia.bandeira > div.faixa-verde {
+            width: 33.333%;
+            height: 100%;
+            background-color: #009246;
+        }
+
+        #italia.bandeira > div.faixa-branca {
+            width: 33.333%;
+            height: 100%;
+            background-color: #ffffff;
+        }
+
+        #italia.bandeira > div.faixa-vermelha {
+            width: 33.333%;
+            height: 100%;
+            background-color: #ce2b37;
+        }
+
+        /* -------------------------------------------------------- */
+        /* 5. BRASIL: Fundo verde, losango amarelo, círculo azul     */
+        /* -------------------------------------------------------- */
+        #brasil.bandeira {
+            background-color: #009b3a; /* Verde da bandeira */
+        }
+
+        #brasil.bandeira > div.losango {
+            width: 300px;
+            height: 180px;
+            background-color: #fedf00; /* Amarelo da bandeira */
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #brasil.bandeira > div.circulo-azul {
+            width: 105px;
+            height: 105px;
+            background-color: #002776; /* Azul da bandeira */
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+        }
+
+        /* Faixa branca curvada através de borda circular com rotação */
+        #brasil.bandeira > div.circulo-azul > div.faixa-branca {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 10px solid transparent;
+            border-top: 10px solid #ffffff;
+            border-radius: 50%;
+            top: 22px;
+            left: -12px;
+            transform: rotate(-25deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-voltar">← Voltar à Lista</a>
+
+        <h1>Bandeiras de Países em HTML e CSS Puro</h1>
+
+        <!-- Links com âncoras internas no início do documento -->
+        <nav class="menu-ancoras">
+            <a href="#japao">Bandeira Japão</a>
+            <a href="#alemanha">Bandeira Alemanha</a>
+            <a href="#holanda">Bandeira Holanda</a>
+            <a href="#italia">Bandeira Itália</a>
+            <a href="#brasil">Bandeira Brasil</a>
+        </nav>
+
+        <!-- Japão -->
+        <section class="pais-secao">
+            <h2>Japão</h2>
+            <div class="bandeira" id="japao">
+                <div class="circulo"></div>
+            </div>
+        </section>
+
+        <!-- Alemanha -->
+        <section class="pais-secao">
+            <h2>Alemanha</h2>
+            <div class="bandeira" id="alemanha">
+                <div class="faixa-preta"></div>
+                <div class="faixa-vermelha"></div>
+                <div class="faixa-amarela"></div>
+            </div>
+        </section>
+
+        <!-- Holanda -->
+        <section class="pais-secao">
+            <h2>Holanda</h2>
+            <div class="bandeira" id="holanda">
+                <div class="faixa-vermelha"></div>
+                <div class="faixa-branca"></div>
+                <div class="faixa-azul"></div>
+            </div>
+        </section>
+
+        <!-- Itália -->
+        <section class="pais-secao">
+            <h2>Itália</h2>
+            <div class="bandeira" id="italia">
+                <div class="faixa-verde"></div>
+                <div class="faixa-branca"></div>
+                <div class="faixa-vermelha"></div>
+            </div>
+        </section>
+
+        <!-- Brasil -->
+        <section class="pais-secao">
+            <h2>Brasil</h2>
+            <div class="bandeira" id="brasil">
+                <div class="losango"></div>
+                <div class="circulo-azul">
+                    <div class="faixa-branca"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+==================================================
+Atividade 1 – O que é uma regra CSS?
+==================================================
+
+CONCEITO:
+Uma regra CSS (CSS Rule) é a unidade básica de estilização que informa ao navegador como formatar um ou mais elementos da página HTML. 
+
+Uma regra é formada por duas partes essenciais:
+1. Seletor (Selector): aponta para o(s) elemento(s) HTML que receberá(ão) o estilo.
+2. Bloco de Declarações: delimitado por chaves { }, contendo uma ou mais declarações no formato "propriedade: valor;".
+
+--------------------------------------------------
+EXEMPLO PRÁTICO:
+--------------------------------------------------
+
+h1 {
+    color: red;
+    font-size: 2em;
+}
+
+DETALHAMENTO DO EXEMPLO:
+- Seletor: "h1" (seleciona todas as tags <h1> do documento).
+- Propriedade: "color" (define qual característica visual será alterada).
+- Valor: "red" (determina o valor atribuído à propriedade, configurando a cor do texto para vermelho).
+- Propriedade: "font-size" | Valor: "2em" (configura o tamanho da fonte com o dobro do padrão).

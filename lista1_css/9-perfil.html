@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 9 - Perfil Profissional (Cleiton Silva Carvalho Paes)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e5e9f0;
+            padding: 40px 20px;
+            color: #2e3440;
+        }
+
+        .nav-voltar {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #2b6cb0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-voltar:hover {
+            text-decoration: underline;
+        }
+
+        /* Container do Currículo estilo Cartão */
+        .curriculo-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            display: flex;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+            border-radius: 6px;
+            overflow: hidden;
+            min-height: 700px;
+        }
+
+        /* Coluna Lateral Esquerda (Pessoal) */
+        .col-lateral {
+            width: 34%;
+            background-color: #37414b; /* Tom cinza azulado escuro da referência */
+            color: #eceff4;
+            padding: 35px 25px;
+        }
+
+        /* Foto de perfil circular */
+        .avatar-wrapper {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 30px auto;
+            background-color: #4c566a;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .lateral-secao-titulo {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.35);
+            padding-bottom: 6px;
+            margin-bottom: 18px;
+            letter-spacing: 0.3px;
+        }
+
+        .info-grupo {
+            margin-bottom: 16px;
+        }
+
+        .info-rotulo {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 3px;
+        }
+
+        .info-valor {
+            font-size: 12.5px;
+            color: #ffffff;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .info-valor a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+        .info-valor a:hover {
+            text-decoration: underline;
+        }
+
+        /* Menu Interno na barra lateral */
+        .menu-interno {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .menu-interno li {
+            margin-bottom: 8px;
+        }
+
+        .menu-interno a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .menu-interno a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* Habilidades na barra lateral */
+        .habilidades-lista {
+            list-style: none;
+        }
+
+        .habilidades-lista li {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin: 0 4px 6px 0;
+            color: #f1f5f9;
+        }
+
+        /* Coluna Principal Direita */
+        .col-principal {
+            width: 66%;
+            padding: 40px 42px;
+            background-color: #ffffff;
+        }
+
+        .nome-principal {
+            font-size: 30px;
+            font-weight: 700;
+            color: #1e293b;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .resumo-texto {
+            font-size: 13.5px;
+            line-height: 1.65;
+            color: #475569;
+            margin-bottom: 28px;
+            text-align: justify;
+        }
+
+        .secao-titulo {
+            font-size: 19px;
+            font-weight: 700;
+            color: #1e293b;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 25px;
+            margin-bottom: 18px;
+        }
+
+        .experiencia-item, .formacao-item {
+            margin-bottom: 20px;
+        }
+
+        .experiencia-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .cargo-titulo {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .periodo-data {
+            font-size: 12.5px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .empresa-subtitulo {
+            font-size: 13px;
+            font-style: italic;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .atividades-lista {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .atividades-lista li {
+            margin-bottom: 4px;
+        }
+
+        mark {
+            background-color: #fef08a;
+            color: #854d0e;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        /* Tabela da Grade de Horários */
+        .grade-tabela {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grade-tabela th, .grade-tabela td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .grade-tabela th {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .grade-tabela tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Detalhes extras */
+        details {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        summary {
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            margin-bottom: 6px;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .curriculo-card {
+                flex-direction: column;
+            }
+            .col-lateral, .col-principal {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="max-width: 900px; margin: 0 auto;">
+        <a href="index.html" class="nav-voltar">← Voltar à Lista</a>
+    </div>
+
+    <div class="curriculo-card">
+        <!-- Coluna Esquerda: Informações Pessoais & Habilidades -->
+        <aside class="col-lateral">
+            <div class="avatar-wrapper">
+                <img src="img/cleiton.jpg" alt="Cleiton Silva Carvalho Paes" class="avatar-img" onerror="this.src='https://media.licdn.com/dms/image/v2/D4D03AQHC_OcRSkri0Q/profile-displayphoto-shrink_400_400/B4DZUGa_T4G4Ak-/0/1739569493650?e=1793232000&v=beta&t=Roi3Q7VAe9gH3OuGQ7oNrzFPdJy0cVsAWZ0s52TUq-w'">
+            </div>
+
+            <h3 class="lateral-secao-titulo">Pessoal</h3>
+
+            <div class="info-grupo">
+                <span class="info-rotulo">Nome</span>
+                <p class="info-valor">Cleiton Silva Carvalho Paes</p>
+            </div>
+
+            <div class="info-grupo">
+                <span class="info-rotulo">E-mail</span>
+                <p class="info-valor">
+                    <a href="mailto:cleiton@email.com">cleiton@email.com</a>
+                </p>
+            </div>
+
+            <div class="info-grupo">
+                <span class="info-rotulo">Telefone</span>
+                <p class="info-valor">
+                    <a href="tel:+5547999999999">(47) 99999-9999</a>
+                </p>
+            </div>
+
+            <div class="info-grupo">
+                <span class="info-rotulo">GitHub</span>
+                <p class="info-valor">
+                    <a href="https://github.com/CleitonSilvaPaes" target="_blank">github.com/CleitonSilvaPaes</a>
+                </p>
+            </div>
+
+            <div class="info-grupo">
+                <span class="info-rotulo">LinkedIn</span>
+                <p class="info-valor">
+                    <a href="https://www.linkedin.com/in/cleiton-s-966449122/" target="_blank">Perfil no LinkedIn</a>
+                </p>
+            </div>
+
+            <!-- Menu Interno -->
+            <h3 class="lateral-secao-titulo" style="margin-top: 25px;">Navegação Rápida</h3>
+            <ul class="menu-interno">
+                <li><a href="#sobre">→ Sobre Mim</a></li>
+                <li><a href="#experiencia">→ Experiência Profissional</a></li>
+                <li><a href="#formacao">→ Formação Acadêmica</a></li>
+                <li><a href="#horarios">→ Grade de Horários</a></li>
+            </ul>
+
+            <!-- Habilidades -->
+            <h3 class="lateral-secao-titulo">Habilidades Técnicas</h3>
+            <ul class="habilidades-lista">
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>JavaScript</li>
+                <li>Git &amp; GitHub</li>
+                <li>Lógica de Programação</li>
+                <li>Banco de Dados</li>
+                <li>Desenvolvimento Web</li>
+                <li>Manutenção de TI</li>
+            </ul>
+        </aside>
+
+        <!-- Coluna Direita: Informações e Conteúdo Principal -->
+        <main class="col-principal">
+            <h1 class="nome-principal">Cleiton Silva Carvalho Paes</h1>
+
+            <section id="sobre">
+                <p class="resumo-texto">
+                    Estudante de tecnologia com foco em <strong>desenvolvimento Web</strong> e criação de soluções modernas. Dedicado ao domínio prático de <em>HTML5, CSS3, JavaScript e arquitetura de sistemas</em>, buscando constante aprimoramento por meio de projetos práticos, estudos aprofundados e atuação no mercado de tecnologia.
+                </p>
+            </section>
+
+            <!-- Experiência Profissional -->
+            <section id="experiencia">
+                <h2 class="secao-titulo">Experiência Profissional</h2>
+
+                <!-- Cargo 1 -->
+                <div class="experiencia-item">
+                    <div class="experiencia-cabecalho">
+                        <span class="cargo-titulo">Desenvolvedor Web Júnior</span>
+                        <span class="periodo-data">2025 - Atual</span>
+                    </div>
+                    <p class="empresa-subtitulo">Empresa de Tecnologia Fictícia</p>
+                    <ul class="atividades-lista">
+                        <li>Desenvolvimento e manutenção de páginas Web responsivas com <em>HTML, CSS e JavaScript</em>.</li>
+                        <li>Criação e refatoração de interfaces de usuário com foco em semântica e boas práticas de UX/UI.</li>
+                        <li><mark>Destaque:</mark> Colaboração ativa com equipe ágil na correção de bugs e otimização de performance.</li>
+                    </ul>
+                </div>
+
+                <!-- Cargo 2 -->
+                <div class="experiencia-item">
+                    <div class="experiencia-cabecalho">
+                        <span class="cargo-titulo">Assistente de Tecnologia</span>
+                        <span class="periodo-data">2023 - 2025</span>
+                    </div>
+                    <p class="empresa-subtitulo">Empresa Fictícia de Informática</p>
+                    <ul class="atividades-lista">
+                        <li>Suporte a usuários e manutenção preventiva/corretiva de computadores e periféricos.</li>
+                        <li>Instalação, configuração de sistemas operacionais e ferramentas corporativas.</li>
+                        <li>Apoio e treinamento a novos colaboradores na utilização de sistemas internos.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Formação Acadêmica -->
+            <section id="formacao">
+                <h2 class="secao-titulo">Formação Acadêmica</h2>
+
+                <div class="formacao-item">
+                    <div class="experiencia-cabecalho">
+                        <span class="cargo-titulo">Análise e Desenvolvimento de Sistemas</span>
+                        <span class="periodo-data"><mark>Em andamento</mark></span>
+                    </div>
+                    <p class="empresa-subtitulo">IFSC - Instituto Federal de Santa Catarina</p>
+                    <p style="font-size: 13px; color: #475569; line-height: 1.5;">
+                        Curso superior focado em desenvolvimento de software, modelagem de banco de dados, engenharia de software e programação para Internet.
+                    </p>
+                </div>
+
+                <div class="formacao-item">
+                    <div class="experiencia-cabecalho">
+                        <span class="cargo-titulo">Ensino Médio</span>
+                        <span class="periodo-data">Concluído</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Grade de Horários -->
+            <section id="horarios">
+                <h2 class="secao-titulo">Grade de Horários Semanal</h2>
+                <table class="grade-tabela">
+                    <thead>
+                        <tr>
+                            <th>Matéria</th>
+                            <th>Dia</th>
+                            <th>Horário</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Banco de Dados</td>
+                            <td>Segunda-feira</td>
+                            <td>18:30 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td>Programação Estruturada</td>
+                            <td>Terça-feira</td>
+                            <td>19:00 - 21:00</td>
+                        </tr>
+                        <tr>
+                            <td>Engenharia de Software</td>
+                            <td>Quarta-feira</td>
+                            <td>18:30 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td>Programação para Internet I</td>
+                            <td>Quinta-feira</td>
+                            <td>18:30 - 22:00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Informações Complementares -->
+            <details>
+                <summary>Mais informações sobre estudos e interesses</summary>
+                <p style="margin-top: 8px;">
+                    Interesse constante no ecossistema Web (Frontend e Backend), consumo de APIs e boas práticas de versionamento com Git.
+                </p>
+                <p style="margin-top: 6px;">
+                    Exemplo de representação matemática: x<sub>1</sub> + x<sub>2</sub> = 10 | Potência: 10<sup>2</sup> = 100.
+                </p>
+            </details>
+        </main>
+    </div>
+</body>
+</html>

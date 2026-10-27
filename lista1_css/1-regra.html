@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 1 - O que é uma regra CSS?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 35px 40px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: #1d6fa5;
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: #1a252f;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #4a5568;
+        }
+
+        .card-explicacao {
+            background-color: #f8fafc;
+            border-left: 5px solid #3498db;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .codigo-box {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .seletor { color: #dcdcaa; font-weight: bold; }
+        .propriedade { color: #9cdcfe; }
+        .valor { color: #ce9178; }
+        .pontuacao { color: #d4d4d4; }
+        .comentario { color: #6a9955; font-style: italic; }
+
+        .tabela-partes {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .tabela-partes th, .tabela-partes td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .tabela-partes th {
+            background-color: #edf2f7;
+            color: #2d3748;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .badge-seletor { background-color: #fff3cd; color: #856404; }
+        .badge-prop { background-color: #d1ecf1; color: #0c5460; }
+        .badge-val { background-color: #d4edda; color: #155724; }
+
+        .preview-box {
+            margin-top: 25px;
+            padding: 20px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .exemplo-renderizado {
+            color: #e74c3c;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">← Voltar ao Sumário da Lista</a>
+        
+        <h1>Atividade 1 – O que é uma regra CSS?</h1>
+
+        <div class="card-explicacao">
+            <p><strong>Conceito:</strong> Uma <strong>regra CSS</strong> (CSS Rule) é a estrutura fundamental da linguagem CSS (Cascading Style Sheets). Trata-se de uma instrução fornecida ao navegador para localizar elementos específicos na árvore do documento (DOM) e aplicar-lhes estilos visuais (como cores, dimensões, fontes, espaçamentos e posicionamentos).</p>
+        </div>
+
+        <h2>Estrutura de uma Regra CSS</h2>
+        <p>Toda regra CSS é composta essencialmente por duas partes principais:</p>
+        <ol style="margin-left: 20px; line-height: 1.8; color: #4a5568;">
+            <li><strong>Seletor (Selector):</strong> Identifica a quais elementos HTML a regra deve ser aplicada.</li>
+            <li><strong>Bloco de Declarações (Declaration Block):</strong> Delimitado por chaves <code>{ }</code>, contém uma ou mais declarações. Cada declaração é um par composto por uma <strong>Propriedade</strong> e um <strong>Valor</strong>, separados por dois-pontos <code>:</code> e finalizados com ponto e vírgula <code>;</code>.</li>
+        </ol>
+
+        <h2>Exemplo Prático</h2>
+        <div class="codigo-box">
+<span class="comentario">/* Regra CSS: Altera a cor e o tamanho do título principal */</span>
+<span class="seletor">h1</span> <span class="pontuacao">{</span>
+    <span class="propriedade">color</span><span class="pontuacao">:</span> <span class="valor">#e74c3c</span><span class="pontuacao">;</span>            <span class="comentario">/* Propriedade: color | Valor: #e74c3c */</span>
+    <span class="propriedade">font-size</span><span class="pontuacao">:</span> <span class="valor">28px</span><span class="pontuacao">;</span>               <span class="comentario">/* Propriedade: font-size | Valor: 28px */</span>
+    <span class="propriedade">text-transform</span><span class="pontuacao">:</span> <span class="valor">uppercase</span><span class="pontuacao">;</span>      <span class="comentario">/* Propriedade: text-transform | Valor: uppercase */</span>
+<span class="pontuacao">}</span>
+        </div>
+
+        <h2>Detalhamento dos Componentes</h2>
+        <table class="tabela-partes">
+            <thead>
+                <tr>
+                    <th>Componente</th>
+                    <th>No Exemplo</th>
+                    <th>Função / Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge badge-seletor">Seletor</span></td>
+                    <td><code>h1</code></td>
+                    <td>Define que todos os elementos <code>&lt;h1&gt;</code> do documento receberão este estilo.</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-prop">Propriedade</span></td>
+                    <td><code>color</code></td>
+                    <td>Especifica qual aspecto visual será modificado (neste caso, a cor da fonte).</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-val">Valor</span></td>
+                    <td><code>#e74c3c</code></td>
+                    <td>Determina a configuração a ser atribuída à propriedade (o tom de vermelho).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Resultado Visual da Regra Acima</h2>
+        <div class="preview-box">
+            <span class="exemplo-renderizado">Exemplo de Título h1 Estilizado</span>
+        </div>
+    </div>
+</body>
+</html>

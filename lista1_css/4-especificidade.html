@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 4 - Análise de Especificidade de Seletores CSS</title>
+    <style>
+        /* Regras do Exercício Original */
+        /*regra 1*/ .exercicio-lista li{color:red;}
+        /*regra 2*/ .exercicio-lista .churras{color:green;}
+        /*regra 3*/ .exercicio-lista .fruta{color:gray}
+        /*regra 4*/ .exercicio-lista li+li.churras{color: black;}
+        /*regra 5*/ .exercicio-lista .churras[draggable="true"]{color: magenta;}
+        /*regra 6*/ #lip1,#lip2,#lip3{color:blue}
+        /*regra 7*/ #lip3.fruta{color:orange}
+        /*regra 8*/ ol>li.churras#lip5{color:purple}
+
+        /* Estilização Geral da Página */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 35px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-back:hover {
+            color: #1d6fa5;
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #0f172a;
+            border-bottom: 3px solid #8b5cf6;
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #334155;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            line-height: 1.7;
+            color: #475569;
+            margin-bottom: 15px;
+        }
+
+        /* Caixa de Demonstração Visual */
+        .demonstracao-box {
+            background-color: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 25px 35px;
+            margin: 20px 0;
+        }
+
+        .exercicio-lista {
+            font-size: 18px;
+            font-weight: 600;
+            padding-left: 20px;
+            line-height: 2;
+        }
+
+        .exercicio-lista li {
+            padding: 2px 0;
+        }
+
+        /* Tabela de Regras */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .badge-cor {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 6px;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+
+        /* Cards de Análise Individual */
+        .item-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border-left: 5px solid #8b5cf6;
+        }
+
+        .item-card h3 {
+            font-size: 17px;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag-vencedora {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+        }
+
+        code {
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">← Voltar ao Sumário da Lista</a>
+
+        <h1>Atividade 4 – Análise de Especificidade de Seletores CSS</h1>
+        <p>Abaixo está a renderização em tempo real do código proposto, acompanhada da demonstração visual e explicação minuciosa do cálculo de especificidade <code>(ID, Classe/Atributo, Elemento)</code> para cada item.</p>
+
+        <h2>1. Demonstração Visual das Cores Aplicadas</h2>
+        <div class="demonstracao-box">
+            <ol class="exercicio-lista">
+                <!--item 1--> <li id="lip0">Item 1: Abacaxi</li>
+                <!--item 2--> <li           class="fruta">Item 2: Melão</li>
+                <!--item 3--> <li id="lip2" class="fruta">Item 3: Pera</li>
+                <!--item 4--> <li id="lip3" class="fruta">Item 4: Uva</li>
+                <!--item 5--> <li id="lip4" class="fruta">Item 5: Maçã</li>
+                <!--item 6--> <li           class="churras">Item 6: Carne</li>
+                <!--item 7--> <li           class="churras">Item 7: Linguiça</li>
+                <!--item 8--> <li id="lip7" class="churras" draggable="true">Item 8: Pão de alho</li>
+            </ol>
+        </div>
+
+        <h2>2. Tabela de Cálculo de Especificidade das Regras</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Regra</th>
+                    <th>Seletor</th>
+                    <th>Cálculo</th>
+                    <th>Tupla (ID, Classe/Atributo, Elemento)</th>
+                    <th>Cor Aplicada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Regra 1</strong></td>
+                    <td><code>li</code></td>
+                    <td>1 elemento</td>
+                    <td><code>(0, 0, 1)</code></td>
+                    <td><span class="badge-cor" style="background: red;"></span>red</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 2</strong></td>
+                    <td><code>.churras</code></td>
+                    <td>1 classe</td>
+                    <td><code>(0, 1, 0)</code></td>
+                    <td><span class="badge-cor" style="background: green;"></span>green</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 3</strong></td>
+                    <td><code>.fruta</code></td>
+                    <td>1 classe</td>
+                    <td><code>(0, 1, 0)</code></td>
+                    <td><span class="badge-cor" style="background: gray;"></span>gray</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 4</strong></td>
+                    <td><code>li + li.churras</code></td>
+                    <td>1 classe + 2 elementos</td>
+                    <td><code>(0, 1, 2)</code></td>
+                    <td><span class="badge-cor" style="background: black;"></span>black</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 5</strong></td>
+                    <td><code>.churras[draggable="true"]</code></td>
+                    <td>1 classe + 1 atributo</td>
+                    <td><code>(0, 2, 0)</code></td>
+                    <td><span class="badge-cor" style="background: magenta;"></span>magenta</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 6</strong></td>
+                    <td><code>#lip1, #lip2, #lip3</code></td>
+                    <td>1 ID (por seletor avaliado)</td>
+                    <td><code>(1, 0, 0)</code></td>
+                    <td><span class="badge-cor" style="background: blue;"></span>blue</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 7</strong></td>
+                    <td><code>#lip3.fruta</code></td>
+                    <td>1 ID + 1 classe</td>
+                    <td><code>(1, 1, 0)</code></td>
+                    <td><span class="badge-cor" style="background: orange;"></span>orange</td>
+                </tr>
+                <tr>
+                    <td><strong>Regra 8</strong></td>
+                    <td><code>ol > li.churras#lip5</code></td>
+                    <td>1 ID + 1 classe + 2 elementos</td>
+                    <td><code>(1, 1, 2)</code></td>
+                    <td><span class="badge-cor" style="background: purple;"></span>purple</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3. Análise Detalhada Item por Item</h2>
+
+        <!-- Item 1 -->
+        <div class="item-card">
+            <h3>Item 1: Abacaxi &lt;li id="lip0"&gt; <span class="tag-vencedora" style="background: red;">Cor: red</span></h3>
+            <p><strong>Regras que coincidem:</strong> Apenas a Regra 1 (<code>li</code>) se aplica.</p>
+            <p><strong>Motivo:</strong> O seletor <code>#lip0</code> não foi estilizado em nenhuma regra do CSS. Logo, o elemento herda unicamente o seletor de tag <code>li</code> com especificidade <code>(0, 0, 1)</code>.</p>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item-card">
+            <h3>Item 2: Melão &lt;li class="fruta"&gt; <span class="tag-vencedora" style="background: gray;">Cor: gray</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1 (<code>li</code>) e Regra 3 (<code>.fruta</code>).</p>
+            <p><strong>Disputa:</strong> O seletor de classe <code>(0, 1, 0)</code> tem maior especificidade do que o seletor de elemento <code>(0, 0, 1)</code>. Portanto, a <strong>Regra 3 (gray)</strong> vence.</p>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item-card">
+            <h3>Item 3: Pera &lt;li id="lip2" class="fruta"&gt; <span class="tag-vencedora" style="background: blue;">Cor: blue</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1 (<code>li</code>), Regra 3 (<code>.fruta</code>) e Regra 6 (<code>#lip2</code>).</p>
+            <p><strong>Disputa:</strong> A Regra 6 possui um seletor de ID com especificidade <code>(1, 0, 0)</code>, superando qualquer combinação de classes ou elementos. Logo, a <strong>Regra 6 (blue)</strong> vence.</p>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item-card">
+            <h3>Item 4: Uva &lt;li id="lip3" class="fruta"&gt; <span class="tag-vencedora" style="background: orange;">Cor: orange</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1, Regra 3, Regra 6 (<code>#lip3</code>) e Regra 7 (<code>#lip3.fruta</code>).</p>
+            <p><strong>Disputa:</strong> Ambas as regras 6 e 7 possuem ID <code>(1, 0, 0)</code>, porém a Regra 7 inclui adicionalmente a classe <code>.fruta</code>, resultando em <code>(1, 1, 0)</code>. Como <code>(1, 1, 0) > (1, 0, 0)</code>, a <strong>Regra 7 (orange)</strong> é aplicada.</p>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item-card">
+            <h3>Item 5: Maçã &lt;li id="lip4" class="fruta"&gt; <span class="tag-vencedora" style="background: gray;">Cor: gray</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1 (<code>li</code>) e Regra 3 (<code>.fruta</code>).</p>
+            <p><strong>Motivo:</strong> O identificador <code>#lip4</code> não foi declarado em nenhuma regra CSS. Na disputa entre a tag <code>li</code> e a classe <code>.fruta</code>, a classe vence: <code>(0, 1, 0) > (0, 0, 1)</code>. Resultado: <strong>Regra 3 (gray)</strong>.</p>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item-card">
+            <h3>Item 6: Carne &lt;li class="churras"&gt; <span class="tag-vencedora" style="background: black;">Cor: black</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1 (<code>li</code>), Regra 2 (<code>.churras</code>) e Regra 4 (<code>li+li.churras</code>).</p>
+            <p><strong>Disputa:</strong> O seletor adjacente <code>li+li.churras</code> combina porque "Carne" é um <code>li.churras</code> imediatamente precedido por outro <code>li</code> ("Maçã"). Sua especificidade é <code>(0, 1, 2)</code>, que é maior que a Regra 2 <code>(0, 1, 0)</code>. Logo, a <strong>Regra 4 (black)</strong> vence.</p>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item-card">
+            <h3>Item 7: Linguiça &lt;li class="churras"&gt; <span class="tag-vencedora" style="background: black;">Cor: black</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1, Regra 2 e Regra 4.</p>
+            <p><strong>Disputa:</strong> O item é precedido imediatamente por "Carne" (um <code>li</code>), satisfazendo o combinador adjacente da Regra 4. Com especificidade <code>(0, 1, 2)</code> sobre <code>(0, 1, 0)</code>, a <strong>Regra 4 (black)</strong> prevalece.</p>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item-card">
+            <h3>Item 8: Pão de alho &lt;li id="lip7" class="churras" draggable="true"&gt; <span class="tag-vencedora" style="background: magenta;">Cor: magenta</span></h3>
+            <p><strong>Regras que coincidem:</strong> Regra 1, Regra 2, Regra 4 e Regra 5 (<code>.churras[draggable="true"]</code>).</p>
+            <p><strong>Disputa:</strong> A Regra 8 não se aplica porque visa <code>#lip5</code>, e não <code>#lip7</code>. Entre a Regra 4 <code>(0, 1, 2)</code> e a Regra 5 <code>(0, 2, 0)</code>, a coluna de classes/atributos tem precedência sobre a de elementos. Como 2 classes/atributos superam 1 classe/atributo, a <strong>Regra 5 (magenta)</strong> vence categoricamente.</p>
+        </div>
+    </div>
+</body>
+</html>

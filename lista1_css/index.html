@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista 1 CSS - Programação para Internet | IFSC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --badge-bg: rgba(59, 130, 246, 0.15);
+            --badge-text: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(6, 182, 212, 0.08) 0px, transparent 60%);
+            background-attachment: fixed;
+            padding: 50px 20px 80px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .tag-curso {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 46px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .subtitulo {
+            font-size: 17px;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+
+        .meta-info {
+            display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-card);
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .meta-info strong {
+            color: #e2e8f0;
+        }
+
+        /* Grid de Cards */
+        .grid-atividades {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-numero {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.12);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .card-icone {
+            font-size: 22px;
+        }
+
+        .card h2 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.35;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-tag {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .btn-abrir {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-abrir:hover {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35);
+            transform: scale(1.02);
+        }
+
+        .links-secundarios {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .links-secundarios a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        .links-secundarios a:hover {
+            text-decoration: underline;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-card);
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="tag-curso">IFSC • Câmpus Lages • PPI-I</div>
+            <h1>Lista 1 — CSS, Seletores e Posicionamento</h1>
+            <p class="subtitulo">
+                Resolução completa e interativa de todas as atividades práticas e teóricas propostas na lista de
+                exercícios de CSS.
+            </p>
+            <div class="meta-info">
+                <span>Professor: <strong>Romulo Beninca</strong></span>
+                <span>Aluno: <strong>Cleiton Silva Paes</strong></span>
+                <span>Disciplina: <strong>Programação para Internet 1</strong></span>
+            </div>
+        </header>
+
+        <main class="grid-atividades">
+
+            <!-- Atividade 0 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 0</span>
+                        <span class="card-icone">🍽️</span>
+                    </div>
+                    <h2>Jogo CSS Diner</h2>
+                    <p>Prática gamificada interativa sobre seletores CSS (classes, IDs, combinadores de filhos,
+                        pseudo-classes).</p>
+                    <div class="card-tags">
+                        <span class="card-tag">#seletores</span>
+                        <span class="card-tag">#flukeout</span>
+                    </div>
+                </div>
+                <a href="https://flukeout.github.io/" target="_blank" rel="noopener noreferrer" class="btn-abrir">Jogar
+                    CSS Diner ↗</a>
+            </div>
+
+            <!-- Atividade 1 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 1</span>
+                        <span class="card-icone">📐</span>
+                    </div>
+                    <h2>O que é uma Regra CSS?</h2>
+                    <p>Explicação detalhada da anatomia de uma regra CSS: seletores, bloco de declarações, propriedades
+                        e valores com exemplos.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">1-regra.html</span>
+                        <span class="card-tag">1-regra.txt</span>
+                    </div>
+                </div>
+                <div>
+                    <a href="1-regra.html" class="btn-abrir">Visualizar Atividade 1 →</a>
+                    <div class="links-secundarios">
+                        <a href="1-regra.txt">Ver versão em texto puro</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Atividade 2 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 2</span>
+                        <span class="card-icone">✍️</span>
+                    </div>
+                    <h2>Tipografia e Destaques (Lorem)</h2>
+                    <p>Página HTML estilizada com fontes variadas (Serif, Sans, Mono, Humanist), cores personalizadas e
+                        tags span com efeitos.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">2-lorem.html</span>
+                        <span class="card-tag">&lt;span&gt;</span>
+                    </div>
+                </div>
+                <a href="2-lorem.html" class="btn-abrir">Visualizar Atividade 2 →</a>
+            </div>
+
+            <!-- Atividade 3 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 3</span>
+                        <span class="card-icone">🔌</span>
+                    </div>
+                    <h2>Formas de Incluir CSS</h2>
+                    <p>Demonstração completa dos 3 métodos: CSS Externo (&lt;link&gt;), CSS Interno (&lt;style&gt;) e
+                        CSS Inline (style="...").</p>
+                    <div class="card-tags">
+                        <span class="card-tag">3-inclusao.html</span>
+                        <span class="card-tag">3-inclusao.txt</span>
+                    </div>
+                </div>
+                <div>
+                    <a href="3-inclusao.html" class="btn-abrir">Visualizar Atividade 3 →</a>
+                    <div class="links-secundarios">
+                        <a href="3-inclusao.txt">Ver versão em texto puro</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Atividade 4 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 4</span>
+                        <span class="card-icone">🎯</span>
+                    </div>
+                    <h2>Análise de Especificidade</h2>
+                    <p>Cálculo matemático detalhado de especificidade (ID, Classe, Elemento) para os 8 itens da lista e
+                        demonstração visual ao vivo.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">4-especificidade.html</span>
+                        <span class="card-tag">4-especificidade.md</span>
+                    </div>
+                </div>
+                <div>
+                    <a href="4-especificidade.html" class="btn-abrir">Visualizar Atividade 4 →</a>
+                    <div class="links-secundarios">
+                        <a href="4-especificidade.md">Ver documentação em Markdown</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Atividade 6a -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 6a</span>
+                        <span class="card-icone">🧱</span>
+                    </div>
+                    <h2>Display Block (Faixas Verticais)</h2>
+                    <p>Reconstrução das 4 faixas coloridas preenchendo a janela com explicação do comportamento padrão
+                        de blocos no fluxo normal.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">6a-display.html</span>
+                        <span class="card-tag">display: block</span>
+                    </div>
+                </div>
+                <a href="6a-display.html" class="btn-abrir">Visualizar Atividade 6a →</a>
+            </div>
+
+            <!-- Atividade 6b -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 6b</span>
+                        <span class="card-icone">📊</span>
+                    </div>
+                    <h2>Colunas Lado a Lado (Float / Flex)</h2>
+                    <p>Reconstrução das 4 colunas horizontais lado a lado no topo da tela com explicação da quebra de
+                        fluxo via float/flex.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">6b-display.html</span>
+                        <span class="card-tag">float / flex</span>
+                    </div>
+                </div>
+                <a href="6b-display.html" class="btn-abrir">Visualizar Atividade 6b →</a>
+            </div>
+
+            <!-- Atividade 6c -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 6c</span>
+                        <span class="card-icone">🔲</span>
+                    </div>
+                    <h2>Posições Absolutas (5 Caixas)</h2>
+                    <p>Reconstrução das caixas nos 4 cantos e no centro exato da tela usando position absolute e
+                        transform translate.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">6c-display.html</span>
+                        <span class="card-tag">position: absolute</span>
+                    </div>
+                </div>
+                <a href="6c-display.html" class="btn-abrir">Visualizar Atividade 6c →</a>
+            </div>
+
+            <!-- Atividade 7 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 7</span>
+                        <span class="card-icone">💬</span>
+                    </div>
+                    <h2>Chat com Float e Positions</h2>
+                    <p>Interface de chat fiel à figura modelo com balões de conversa, avatares flutuantes, timestamps e
+                        caixa de envio.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">7-chat.html</span>
+                        <span class="card-tag">float &amp; position</span>
+                    </div>
+                </div>
+                <a href="7-chat.html" class="btn-abrir">Visualizar Atividade 7 →</a>
+            </div>
+
+            <!-- Atividade 8 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 8</span>
+                        <span class="card-icone">🚩</span>
+                    </div>
+                    <h2>Bandeiras com CSS Puro</h2>
+                    <p>Bandeiras oficiais de Japão, Alemanha, Holanda, Itália e Brasil criadas sem imagens ou SVG, com
+                        seletores combinados e âncoras.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">8-bandeiras.html</span>
+                        <span class="card-tag">#pais.bandeira &gt; div</span>
+                    </div>
+                </div>
+                <a href="8-bandeiras.html" class="btn-abrir">Visualizar Atividade 8 →</a>
+            </div>
+
+            <!-- Atividade 9 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 9</span>
+                        <span class="card-icone">👤</span>
+                    </div>
+                    <h2>Perfil Profissional (Cleiton Paes)</h2>
+                    <p>Currículo pessoal com dados de lista1/curriculo.html adaptado ao layout profissional com barra
+                        lateral escura, foto redonda, experiências, habilidades e grade de horários.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">9-perfil.html</span>
+                        <span class="card-tag">display: flex</span>
+                    </div>
+                </div>
+                <a href="9-perfil.html" class="btn-abrir">Visualizar Atividade 9 →</a>
+            </div>
+
+            <!-- Atividade 10 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 10</span>
+                        <span class="card-icone">⛵</span>
+                    </div>
+                    <h2>Barquinho e Mar com @keyframes</h2>
+                    <p>Cena animada com céu em degradê, nuvens formadas por border-radius e box-shadow, mar ondulante e
+                        barco navegando.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">10-barquinho.html</span>
+                        <span class="card-tag">@keyframes &amp; z-index</span>
+                    </div>
+                </div>
+                <a href="10-barquinho.html" class="btn-abrir">Visualizar Atividade 10 →</a>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>Instituto Federal de Santa Catarina — Câmpus Lages • Programação para Internet I • 2026</p>
+        </footer>
+    </div>
+</body>
+
+</html>
