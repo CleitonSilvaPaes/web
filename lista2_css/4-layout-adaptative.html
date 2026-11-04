@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 4 - Layout Adaptativo (@media screen)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #eef2f6;
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .layout-grid {
+            display: grid;
+            width: 100%;
+            min-height: calc(100vh - 24px);
+            background-color: #ffffff;
+            padding: 10px;
+            gap: 10px;
+            grid-template-columns: 180px 1fr 180px;
+            grid-template-rows: 70px 60px 1fr 60px 50px;
+            grid-template-areas:
+                "header     header      header"
+                "left-aside banner      right-aside"
+                "left-aside main        right-aside"
+                "left-aside low-content right-aside"
+                "footer     footer      footer";
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .bloco {
+            font-weight: 700;
+            color: #111827;
+            font-size: 15px;
+            padding: 14px 16px;
+        }
+
+        .header {
+            grid-area: header;
+            background-color: #f4b400;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .banner {
+            grid-area: banner;
+            background-color: #db4437;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-aside {
+            grid-area: left-aside;
+            background-color: #0f9d58;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .main-content {
+            grid-area: main;
+            background-color: #4285f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .main-content .titulo-main {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .main-content .dimensoes {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .right-aside {
+            grid-area: right-aside;
+            background-color: #f4b400;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .low-content {
+            grid-area: low-content;
+            background-color: #0f9d58;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .footer {
+            grid-area: footer;
+            background-color: #4285f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Media query para telas menores conforme segunda imagem da Atividade 4 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+
+            .layout-grid {
+                max-width: 480px;
+                margin: 0 auto;
+                grid-template-columns: 1fr;
+                grid-template-rows: 55px 55px 55px 1fr 55px 55px 50px;
+                grid-template-areas:
+                    "header"
+                    "banner"
+                    "left-aside"
+                    "main"
+                    "right-aside"
+                    "low-content"
+                    "footer";
+            }
+
+            .left-aside,
+            .right-aside {
+                align-items: center;
+            }
+        }
+
+        /* Botão flutuante para voltar ao índice */
+        .btn-voltar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background 0.2s, transform 0.2s;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-voltar:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="btn-voltar">← Voltar à Lista</a>
+
+    <div class="layout-grid" id="grid">
+        <header class="bloco header">Header</header>
+        <div class="bloco banner">Banner</div>
+        <aside class="bloco left-aside">Left Aside</aside>
+        <main class="bloco main-content" id="mainBox">
+            <div class="titulo-main">Main Content</div>
+            <div class="dimensoes" id="dimText">Width: 916, Height: 873</div>
+        </main>
+        <aside class="bloco right-aside">Right Aside</aside>
+        <section class="bloco low-content">Low Content</section>
+        <footer class="bloco footer">Footer</footer>
+    </div>
+
+    <script>
+        const mainBox = document.getElementById('mainBox');
+        const dimText = document.getElementById('dimText');
+
+        function atualizarDimensoes() {
+            const rect = mainBox.getBoundingClientRect();
+            dimText.textContent = `Width: ${Math.round(rect.width)}, Height: ${Math.round(rect.height)}`;
+        }
+
+        window.addEventListener('resize', atualizarDimensoes);
+        window.addEventListener('DOMContentLoaded', atualizarDimensoes);
+    </script>
+</body>
+
+</html>
+
