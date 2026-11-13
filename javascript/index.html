@@ -12,11 +12,13 @@
     <p class="c1">Texto 2x</p>
     <p class="contador"></p>
     <button id="botao">click</button>
+    <button id="parar">parar contador</button>
+    <button id="iniciar">Iniciar contador</button>
 
     <script>
 
         let contador = 0;
-
+        /*
         document.querySelector("#botao").addEventListener('click', ()=>{
             // localizar o paragravo
             let paragrafoContador = document.querySelector(".contador")
@@ -29,7 +31,55 @@
                 contador = 1;
             }
         })
+        
+        */
 
+        /**
+         * Event loop
+         * 1 - Call Stack - codigo
+         * 2 - Microtask Queue - Promises(.then, catch, .finally), asyncy/await
+         * 3 - (Macrotasks, Task Queue) - setTimeout, setInterval   
+        */
+
+        setTimeout(() => {
+            console.log("A");
+        }, 0);
+        console.log("B");
+
+        Promise.resolve().then(() => {
+            console.log("C");
+        })
+
+        console.log("D");
+
+        let intervalo;
+
+        document.querySelector("#parar").addEventListener("click", ()=>{
+            clearInterval(intervalo);
+        })
+
+        document.querySelector("#iniciar").addEventListener("click", ()=>{
+            intervalo = setInterval(()=>{
+                // localizar o paragravo
+                let paragrafoContador = document.querySelector(".contador")
+                // incremetar
+                contador++
+                // salvar o valor no paragravo
+                paragrafoContador.innerHTML = contador;
+            }, 500)
+        })
+
+
+        /**
+        const id = setInterval(()=>{
+            // localizar o paragravo
+            let paragrafoContador = document.querySelector(".contador")
+            // incremetar
+            contador++
+            // salvar o valor no paragravo
+            paragrafoContador.innerHTML = contador;
+        }, 500);
+        */
     </script>
 </body>
 </html>
