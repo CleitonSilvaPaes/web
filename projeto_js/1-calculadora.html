@@ -4,33 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atividade 1 - Calculadora Simples JS | IFSC</title>
+    <title>Atividade 1 - Calculadora Estilo Windows JS | IFSC</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
         :root {
             --bg-body: #0b0f19;
             --bg-card: rgba(17, 24, 39, 0.85);
             --border-card: rgba(255, 255, 255, 0.08);
-            --accent-blue: #3b82f6;
+            --accent-blue: #0078d4;
+            --accent-blue-hover: #106ebe;
             --accent-cyan: #06b6d4;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --calc-bg: #111827;
-            --btn-num: #1f2937;
-            --btn-num-hover: #374151;
-            --btn-op: #1e3a8a;
-            --btn-op-hover: #2563eb;
-            --btn-special: #374151;
-            --btn-special-hover: #4b5563;
-            --btn-equal: #059669;
-            --btn-equal-hover: #10b981;
-            --btn-clear: #991b1b;
-            --btn-clear-hover: #dc2626;
+            --calc-bg: #182030;
+            --btn-num: #1f2b3e;
+            --btn-num-hover: #293850;
+            --btn-op: #162438;
+            --btn-op-hover: #223552;
+            --btn-op-text: #60a5fa;
+            --btn-special: #162438;
+            --btn-special-hover: #223552;
+            --btn-equal: #0078d4;
+            --btn-equal-hover: #106ebe;
+            --btn-clear: #261f2d;
+            --btn-clear-hover: #3b2842;
+            --btn-clear-text: #f87171;
         }
 
         * {
@@ -48,7 +51,7 @@
                 radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
             background-attachment: fixed;
-            padding: 30px 20px 60px 20px;
+            padding: 25px 20px 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -56,7 +59,7 @@
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 940px;
         }
 
         /* Topo e Navegação */
@@ -64,7 +67,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -101,13 +104,13 @@
 
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
         h1 {
-            font-size: clamp(26px, 4vw, 36px);
+            font-size: clamp(24px, 4vw, 34px);
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -116,106 +119,152 @@
 
         .subtitulo {
             color: var(--text-muted);
-            font-size: 15px;
-            max-width: 650px;
+            font-size: 14px;
+            max-width: 680px;
             margin: 0 auto;
             line-height: 1.5;
         }
 
-        /* Layout Grid: Calculadora + Painel Explicativo */
+        /* Layout Grid */
         .conteudo-principal {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
+            gap: 25px;
             align-items: start;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 780px) {
             .conteudo-principal {
-                grid-template-columns: 360px 1fr;
+                grid-template-columns: 370px 1fr;
             }
         }
 
-        /* Container da Calculadora */
+        /* Container da Calculadora (Estilo Windows Moderno) */
         .calculadora {
             background: var(--calc-bg);
             border: 1px solid var(--border-card);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
         }
 
-        /* Visor / Display */
+        .calc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .calc-titulo {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calc-badge {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 120, 212, 0.2);
+            color: #60a5fa;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Visor / Display Windows */
         .visor-container {
-            background: #030712;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0d131f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
             text-align: right;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .expressao-historico {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             min-height: 20px;
-            overflow-x: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
             white-space: nowrap;
-            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .display-principal-wrapper {
+            width: 100%;
+            overflow: hidden;
         }
 
         .display-principal {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 32px;
+            font-size: 40px;
             font-weight: 700;
             color: #ffffff;
-            overflow-x: auto;
+            line-height: 1.1;
             white-space: nowrap;
-            line-height: 1.2;
+            text-align: right;
+            transition: font-size 0.15s ease;
+            user-select: none;
         }
 
         /* Teclado da Calculadora */
         .teclado {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn-calc {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
-            border: none;
-            border-radius: 10px;
-            padding: 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 15px 0;
             cursor: pointer;
             transition: all 0.15s ease;
             user-select: none;
             display: flex;
             align-items: center;
             justify-content: center;
+            outline: none;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-1px);
         }
 
         .btn-calc:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         /* Cores dos Botões */
         .btn-num {
             background-color: var(--btn-num);
-            color: #f1f5f9;
+            color: #ffffff;
         }
 
         .btn-num:hover {
             background-color: var(--btn-num-hover);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         .btn-op {
             background-color: var(--btn-op);
-            color: #93c5fd;
+            color: var(--btn-op-text);
+            font-size: 20px;
         }
 
         .btn-op:hover {
@@ -226,6 +275,7 @@
         .btn-special {
             background-color: var(--btn-special);
             color: #e2e8f0;
+            font-size: 15px;
         }
 
         .btn-special:hover {
@@ -234,7 +284,7 @@
 
         .btn-clear {
             background-color: var(--btn-clear);
-            color: #fca5a5;
+            color: var(--btn-clear-text);
         }
 
         .btn-clear:hover {
@@ -242,15 +292,18 @@
             color: #ffffff;
         }
 
+        /* Botão de Igual estilo Windows (Azul Vivo) */
         .btn-equal {
             background-color: var(--btn-equal);
             color: #ffffff;
-            grid-column: span 2;
+            font-size: 22px;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(0, 120, 212, 0.35);
         }
 
         .btn-equal:hover {
             background-color: var(--btn-equal-hover);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 6px 18px rgba(0, 120, 212, 0.5);
         }
 
         /* Painel Lateral com Boas Práticas e Requisitos */
@@ -258,40 +311,36 @@
             background: var(--bg-card);
             border: 1px solid var(--border-card);
             border-radius: 16px;
-            padding: 24px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
         }
 
         .painel-info h2 {
-            font-size: 18px;
+            font-size: 16px;
             color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             border-bottom: 1px solid var(--border-card);
-            padding-bottom: 12px;
-        }
-
-        .painel-info h2 span {
-            font-size: 20px;
+            padding-bottom: 10px;
         }
 
         .lista-requisitos {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .lista-requisitos li {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.5;
             display: flex;
             align-items: flex-start;
-            gap: 10px;
+            gap: 8px;
         }
 
         .check-icon {
@@ -301,17 +350,17 @@
         }
 
         .bloco-seguranca {
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.25);
+            background: rgba(0, 120, 212, 0.08);
+            border: 1px solid rgba(0, 120, 212, 0.25);
             border-radius: 10px;
-            padding: 14px;
-            font-size: 13px;
+            padding: 12px;
+            font-size: 12.5px;
             color: #cbd5e1;
             line-height: 1.5;
         }
 
         .bloco-seguranca strong {
-            color: var(--accent-cyan);
+            color: #60a5fa;
             display: block;
             margin-bottom: 4px;
         }
@@ -320,18 +369,18 @@
             display: grid;
             grid-template-columns: auto 1fr;
             gap: 8px 12px;
-            font-size: 13px;
+            font-size: 12.5px;
             color: var(--text-muted);
         }
 
         kbd {
             background: #1f2937;
             color: #f8fafc;
-            padding: 3px 8px;
+            padding: 2px 7px;
             border-radius: 4px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
+            font-size: 11px;
             text-align: center;
         }
 
@@ -349,281 +398,594 @@
     <div class="container">
         <!-- Barra de Navegação Superior -->
         <nav class="top-nav">
-            <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+            <a href="../index.html" class="btn-voltar">← Voltar ao Menu</a>
             <div class="tag-atividade">IFSC • Avaliação 2 • Atividade 1</div>
         </nav>
 
         <header>
             <h1>Calculadora Simples JS</h1>
+            <p class="subtitulo">
+                Interface baseada na Calculadora Padrão do Windows com formatação de milhar em pt-BR (ex: <code>1.000</code>),
+                elevação de operação ao visor superior, limite de 16 dígitos e validação estrita de parênteses para <code>eval()</code> seguro.
+            </p>
         </header>
 
         <div class="conteudo-principal">
-            <!-- Calculadora Interativa -->
-            <main class="calculadora" aria-label="Calculadora Interativa">
+            <!-- Calculadora Interativa Estilo Windows -->
+            <main class="calculadora" aria-label="Calculadora Interativa Padrão">
+                <div class="calc-header">
+                    <span class="calc-titulo">🧮 Padrão</span>
+                    <span class="calc-badge">pt-BR • eval()</span>
+                </div>
+
                 <div class="visor-container">
                     <div class="expressao-historico" id="expressaoHistorico" aria-live="polite"></div>
-                    <div class="display-principal" id="displayPrincipal" aria-live="assertive">0</div>
+                    <div class="display-principal-wrapper">
+                        <div class="display-principal" id="displayPrincipal" aria-live="assertive">0</div>
+                    </div>
                 </div>
 
                 <div class="teclado">
                     <!-- Linha 1 -->
-                    <button type="button" class="btn-calc btn-clear" data-acao="limpar-tudo"
-                        title="Limpar Tudo (Esc)">C</button>
-                    <button type="button" class="btn-calc btn-special" data-acao="limpar-entrada"
-                        title="Limpar Entrada Atual">CE</button>
-                    <button type="button" class="btn-calc btn-special" data-acao="apagar"
-                        title="Apagar Último (Backspace)">⌫</button>
-                    <button type="button" class="btn-calc btn-op" data-valor="/" title="Divisão">÷</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="porcentagem" title="Porcentagem (%)">%</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="limpar-entrada" title="Limpar Entrada Atual (CE)">CE</button>
+                    <button type="button" class="btn-calc btn-clear" data-acao="limpar-tudo" title="Limpar Tudo (C / Esc)">C</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="apagar" title="Apagar Último Dígito (Backspace)">⌫</button>
 
                     <!-- Linha 2 -->
-                    <button type="button" class="btn-calc btn-special" data-valor="(" title="Abre Parênteses">(</button>
-                    <button type="button" class="btn-calc btn-special" data-valor=")"
-                        title="Fecha Parênteses">)</button>
-                    <button type="button" class="btn-calc btn-special" data-valor="%" title="Porcentagem">%</button>
-                    <button type="button" class="btn-calc btn-op" data-valor="*" title="Multiplicação">×</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="abre-parentese" title="Abre Parênteses">(</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="fecha-parentese" title="Fecha Parênteses">)</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="inverter-sinal" title="Inverter Sinal (+/-)">+/−</button>
+                    <button type="button" class="btn-calc btn-op" data-op="/" title="Divisão (÷)">÷</button>
 
                     <!-- Linha 3 -->
-                    <button type="button" class="btn-calc btn-num" data-valor="7">7</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="8">8</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="9">9</button>
-                    <button type="button" class="btn-calc btn-op" data-valor="-" title="Subtração">−</button>
+                    <button type="button" class="btn-calc btn-num" data-num="7">7</button>
+                    <button type="button" class="btn-calc btn-num" data-num="8">8</button>
+                    <button type="button" class="btn-calc btn-num" data-num="9">9</button>
+                    <button type="button" class="btn-calc btn-op" data-op="*" title="Multiplicação (×)">×</button>
 
                     <!-- Linha 4 -->
-                    <button type="button" class="btn-calc btn-num" data-valor="4">4</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="5">5</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="6">6</button>
-                    <button type="button" class="btn-calc btn-op" data-valor="+" title="Adição">+</button>
+                    <button type="button" class="btn-calc btn-num" data-num="4">4</button>
+                    <button type="button" class="btn-calc btn-num" data-num="5">5</button>
+                    <button type="button" class="btn-calc btn-num" data-num="6">6</button>
+                    <button type="button" class="btn-calc btn-op" data-op="-" title="Subtração (−)">−</button>
 
                     <!-- Linha 5 -->
-                    <button type="button" class="btn-calc btn-num" data-valor="1">1</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="2">2</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="3">3</button>
-                    <button type="button" class="btn-calc btn-num" data-valor="." title="Ponto Decimal">.</button>
+                    <button type="button" class="btn-calc btn-num" data-num="1">1</button>
+                    <button type="button" class="btn-calc btn-num" data-num="2">2</button>
+                    <button type="button" class="btn-calc btn-num" data-num="3">3</button>
+                    <button type="button" class="btn-calc btn-op" data-op="+" title="Adição (+)">+</button>
 
                     <!-- Linha 6 -->
-                    <button type="button" class="btn-calc btn-num" data-valor="0"
-                        style="grid-column: span 2;">0</button>
-                    <button type="button" class="btn-calc btn-equal" data-acao="calcular"
-                        title="Calcular Resultado (Enter)">=</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="raiz" title="Raiz Quadrada (√)">√</button>
+                    <button type="button" class="btn-calc btn-num" data-num="0">0</button>
+                    <button type="button" class="btn-calc btn-num" data-acao="virgula" title="Vírgula Decimal">,</button>
+                    <button type="button" class="btn-calc btn-equal" data-acao="calcular" title="Calcular Resultado (= / Enter)">=</button>
                 </div>
             </main>
 
             <!-- Painel de Especificações e Boas Práticas -->
             <aside class="painel-info">
+                <h2><span>🛡️</span> Comportamento Estilo Windows</h2>
+                <div class="bloco-seguranca">
+                    <strong>1. Formatação de Milhar e Decimais (pt-BR):</strong>
+                    Conforme os números são digitados, o separador de milhar com ponto (<code>1.000</code>, <code>-729.927</code>) é formatado automaticamente, enquanto a vírgula é usada para decimais.
+                </div>
+
+                <div class="bloco-seguranca">
+                    <strong>2. Operações e Visor Elevado:</strong>
+                    Ao selecionar um operador (<code>+</code>, <code>−</code>, <code>×</code>, <code>÷</code>), a expressão anterior sobe ao visor superior com o operador e o visor aguarda o próximo número.
+                </div>
+
+                <div class="bloco-seguranca">
+                    <strong>3. Validação Estrita de Parênteses:</strong>
+                    Não é permitido fechar parênteses <code>)</code> sem antes abrir <code>(</code>. Ao calcular com <code>=</code>, parênteses pendentes são balanceados automaticamente.
+                </div>
+
+                <div class="bloco-seguranca">
+                    <strong>4. Limite de 16 Dígitos &amp; Auto-ajuste de Fonte:</strong>
+                    Evita estouro de display com auto-scaling suave de tamanho de texto e limite estrito.
+                </div>
+
                 <h2><span>⌨️</span> Atalhos de Teclado</h2>
                 <div class="atalhos-teclado">
                     <kbd>0 - 9</kbd> <span>Inserir dígitos</span>
+                    <kbd>, ou .</kbd> <span>Vírgula decimal</span>
                     <kbd>+ - * /</kbd> <span>Operações aritméticas</span>
+                    <kbd>( e )</kbd> <span>Parênteses validados</span>
                     <kbd>Enter</kbd> ou <kbd>=</kbd> <span>Calcular resultado</span>
-                    <kbd>Backspace</kbd> <span>Apagar último caractere</span>
-                    <kbd>Esc</kbd> <span>Limpar calculadora (C)</span>
+                    <kbd>Backspace</kbd> <span>Apagar dígito (⌫)</span>
+                    <kbd>Esc</kbd> <span>Limpar tudo (C)</span>
                 </div>
             </aside>
         </div>
 
         <footer>
-            IFSC • Câmpus Lages • Disciplina: Programação para Internet I • Prof. Romulo Beninca • Alunos: Cleiton Paes | Izaque Carlos
-            Paes
+            IFSC • Câmpus Lages • Disciplina: Programação para Internet I • Prof. Romulo Beninca • Aluno: Cleiton Silva Paes
         </footer>
     </div>
 
     <!-- Script da Calculadora -->
     <script>
         /**
-         * Módulo da Calculadora Simples
-         * Desenvolvido com boas práticas de segurança, validação e manipulação do DOM.
+         * Calculadora Estilo Windows com Avaliação por eval()
+         * Implementa:
+         * 1. Formatação em tempo real de milhar (.) e decimal (,) pt-BR
+         * 2. Visor duplo: operação ativa elevada ao histórico superior
+         * 3. Limite de 16 dígitos com redimensionamento de fonte
+         * 4. Validação estrita de abertura e fechamento de parênteses
+         * 5. Sanitização estrita antes de invocar eval()
          */
         document.addEventListener("DOMContentLoaded", () => {
             const displayPrincipal = document.getElementById("displayPrincipal");
             const expressaoHistorico = document.getElementById("expressaoHistorico");
             const botoes = document.querySelectorAll(".btn-calc");
 
-            let expressaoAtual = "";
-            let resultadoCalculado = false;
+            const LIMITE_DIGITOS = 16;
+            const REGEX_SEGURANCA_EVAL = /^[0-9+\-*/().\s]+$/;
 
-            // Regex de sanitização: permite apenas dígitos, espaços e os operadores permitidos
-            const REGEX_CARACTERES_PERMITIDOS = /^[0-9+\-*/().\s%]+$/;
+            // Estado interno da calculadora
+            let entradaAtual = "0";          // String pura em formato numérico padrão (ex: "-729927.5")
+            let expressaoPendente = "";      // Expressão que subiu para o visor superior para cálculo no eval()
+            let expressaoExibicao = "";     // Expressão formatada visualmente no topo (com símbolos ×, ÷)
+            let operadorPendente = null;     // Operador aritmético ativo (+, -, *, /)
+            let aguardandoNovoNumero = false; // Flag: se o próximo clique numérico substitui a entrada atual
+            let resultadoFinalExibido = false;
+            let parentesesAbertos = 0;
 
             /**
-             * Atualiza o display principal da calculadora
+             * Formata uma string numérica pura para exibição pt-BR:
+             * Ex: "-729927.5" -> "-729.927,5"
+             * Ex: "1000" -> "1.000"
              */
-            function atualizarDisplay() {
-                if (expressaoAtual === "") {
-                    displayPrincipal.textContent = "0";
+            function formatarParaPtBR(numStr) {
+                if (numStr === "" || numStr === "0") return "0";
+                if (numStr === "-0") return "-0";
+                if (numStr === "-") return "-";
+                if (numStr === "Erro" || numStr === "Divisão por Zero" || numStr === "Erro de Sintaxe") return numStr;
+
+                const ehNegativo = numStr.startsWith("-");
+                let valorLimpo = ehNegativo ? numStr.slice(1) : numStr;
+
+                const temPontoDecimal = valorLimpo.includes(".");
+                let [parteInteira, parteDecimal] = valorLimpo.split(".");
+
+                // Pontua milhares com '.' a cada 3 dígitos
+                const parteInteiraFormatada = parteInteira.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+                let resultado = (ehNegativo ? "-" : "") + parteInteiraFormatada;
+
+                if (temPontoDecimal) {
+                    resultado += "," + (parteDecimal !== undefined ? parteDecimal : "");
+                }
+
+                return resultado;
+            }
+
+            /**
+             * Ajusta dinamicamente a fonte do visor conforme o tamanho do número para nunca quebrar a interface
+             */
+            function ajustarTamanhoFonte(textoFormatado) {
+                const len = textoFormatado.length;
+                if (len <= 9) {
+                    displayPrincipal.style.fontSize = "40px";
+                } else if (len <= 12) {
+                    displayPrincipal.style.fontSize = "32px";
+                } else if (len <= 15) {
+                    displayPrincipal.style.fontSize = "26px";
                 } else {
-                    // Substitui visualmente * e / por × e ÷ para melhor legibilidade
-                    displayPrincipal.textContent = expressaoAtual
-                        .replace(/\*/g, "×")
-                        .replace(/\//g, "÷");
+                    displayPrincipal.style.fontSize = "21px";
                 }
             }
 
             /**
-             * Adiciona um caractere ou operador à expressão
-             * @param {string} valor
+             * Renderiza a interface
              */
-            function inserirCaractere(valor) {
-                // Se o usuário acabou de obter um resultado e clica num número, inicia nova conta
-                if (resultadoCalculado) {
-                    if (/[0-9.]/.test(valor)) {
-                        expressaoAtual = "";
-                    }
-                    resultadoCalculado = false;
-                }
+            function atualizarVisor() {
+                const textoFormatado = formatarParaPtBR(entradaAtual);
+                displayPrincipal.textContent = textoFormatado;
+                ajustarTamanhoFonte(textoFormatado);
+                expressaoHistorico.textContent = expressaoExibicao;
+            }
 
-                // Evita pontos decimais duplicados consecutivos
-                if (valor === "." && expressaoAtual.endsWith(".")) {
+            /**
+             * Insere um dígito numérico (0-9)
+             */
+            function inserirDigito(digito) {
+                if (resultadoFinalExibido) {
+                    // Começa conta nova do zero
+                    entradaAtual = digito;
+                    expressaoPendente = "";
+                    expressaoExibicao = "";
+                    operadorPendente = null;
+                    parentesesAbertos = 0;
+                    resultadoFinalExibido = false;
+                    aguardandoNovoNumero = false;
+                    atualizarVisor();
                     return;
                 }
 
-                // Evita múltiplos operadores aritméticos consecutivos (exceto sinal de menos unário)
-                const ultCaractere = expressaoAtual.slice(-1);
-                const ehOperadorAtual = ["+", "-", "*", "/"].includes(valor);
-                const ultEhOperador = ["+", "-", "*", "/"].includes(ultCaractere);
-
-                if (ehOperadorAtual && ultEhOperador) {
-                    // Se o último já era operador e o novo também é, substitui pelo novo (exceto se for '-' após operador)
-                    if (valor !== "-" || ultCaractere === "-") {
-                        expressaoAtual = expressaoAtual.slice(0, -1) + valor;
-                        atualizarDisplay();
-                        return;
-                    }
-                }
-
-                // Tratamento especial para porcentagem: converte 'X%' em '(X/100)'
-                if (valor === "%") {
-                    if (expressaoAtual === "" || ultEhOperador) return;
-                    expressaoAtual += "/100";
-                    calcularResultado();
+                if (aguardandoNovoNumero) {
+                    entradaAtual = digito;
+                    aguardandoNovoNumero = false;
+                    atualizarVisor();
                     return;
                 }
 
-                expressaoAtual += valor;
-                atualizarDisplay();
+                // Limite de dígitos para evitar overflow
+                const apenasDigitos = entradaAtual.replace(/[^0-9]/g, "");
+                if (apenasDigitos.length >= LIMITE_DIGITOS) {
+                    return;
+                }
+
+                if (entradaAtual === "0") {
+                    entradaAtual = digito;
+                } else if (entradaAtual === "-0") {
+                    entradaAtual = "-" + digito;
+                } else {
+                    entradaAtual += digito;
+                }
+
+                atualizarVisor();
             }
 
             /**
-             * Limpa toda a expressão e histórico
+             * Insere vírgula decimal
              */
-            function limparTudo() {
-                expressaoAtual = "";
-                expressaoHistorico.textContent = "";
-                resultadoCalculado = false;
-                atualizarDisplay();
+            function inserirVirgula() {
+                if (resultadoFinalExibido || aguardandoNovoNumero) {
+                    entradaAtual = "0.";
+                    resultadoFinalExibido = false;
+                    aguardandoNovoNumero = false;
+                    atualizarVisor();
+                    return;
+                }
+
+                if (!entradaAtual.includes(".")) {
+                    entradaAtual += ".";
+                    atualizarVisor();
+                }
             }
 
             /**
-             * Limpa a entrada atual mantendo o histórico anterior
+             * Inverte o sinal (+ / -) do número atual
+             */
+            function inverterSinal() {
+                if (entradaAtual === "0" || entradaAtual === "") return;
+
+                if (entradaAtual.startsWith("-")) {
+                    entradaAtual = entradaAtual.slice(1);
+                } else {
+                    entradaAtual = "-" + entradaAtual;
+                }
+                atualizarVisor();
+            }
+
+            /**
+             * Converte operador aritmético para símbolo amigável no visor superior
+             */
+            function simboloOperador(op) {
+                switch (op) {
+                    case "+": return "+";
+                    case "-": return "−";
+                    case "*": return "×";
+                    case "/": return "÷";
+                    default: return op;
+                }
+            }
+
+            /**
+             * Executa operações aritméticas (+, -, *, /) elevando ao visor superior
+             */
+            function aplicarOperador(op) {
+                resultadoFinalExibido = false;
+
+                // Se o usuário clica num operador consecutivamente para trocar o operador
+                if (aguardandoNovoNumero && operadorPendente !== null && !expressaoPendente.endsWith(")")) {
+                    operadorPendente = op;
+                    // Substitui o último operador no histórico visual e no cálculo
+                    expressaoPendente = expressaoPendente.slice(0, -2) + `${op} `;
+                    expressaoExibicao = expressaoExibicao.slice(0, -2) + `${simboloOperador(op)} `;
+                    atualizarVisor();
+                    return;
+                }
+
+                const numAtual = entradaAtual.endsWith(".") ? entradaAtual.slice(0, -1) : entradaAtual;
+                const numVisual = formatarParaPtBR(numAtual);
+
+                if (expressaoPendente === "" || resultadoFinalExibido) {
+                    // Primeira operação: sobe o número atual com o operador
+                    expressaoPendente = `${numAtual} ${op} `;
+                    expressaoExibicao = `${numVisual} ${simboloOperador(op)} `;
+                } else {
+                    // Se o último foi fechamento de parêntese, não repete o numAtual
+                    if (expressaoPendente.trim().endsWith(")")) {
+                        expressaoPendente += ` ${op} `;
+                        expressaoExibicao += ` ${simboloOperador(op)} `;
+                    } else {
+                        // Calcula o subtotal intermediário se já houver operação pendente
+                        try {
+                            const subExpr = expressaoPendente + numAtual;
+                            const resParcial = eval(subExpr);
+                            if (isFinite(resParcial)) {
+                                entradaAtual = resParcial.toString();
+                            }
+                        } catch (e) {
+                            // Se estiver com parênteses abertos, continua acumulando sem calcular agora
+                        }
+
+                        expressaoPendente += `${numAtual} ${op} `;
+                        expressaoExibicao += `${numVisual} ${simboloOperador(op)} `;
+                    }
+                }
+
+                operadorPendente = op;
+                aguardandoNovoNumero = true;
+                atualizarVisor();
+            }
+
+            /**
+             * Validação e inserção de Parênteses
+             */
+            function abrirParentese() {
+                if (resultadoFinalExibido) {
+                    limparTudo();
+                }
+
+                // Se houver um número recém digitado sem operador, insere multiplicação implícita
+                if (!aguardandoNovoNumero && expressaoPendente !== "" && !expressaoPendente.trim().endsWith("+") && !expressaoPendente.trim().endsWith("-") && !expressaoPendente.trim().endsWith("*") && !expressaoPendente.trim().endsWith("/")) {
+                    aplicarOperador("*");
+                }
+
+                parentesesAbertos++;
+                expressaoPendente += "( ";
+                expressaoExibicao += "( ";
+                aguardandoNovoNumero = true;
+                atualizarVisor();
+            }
+
+            function fecharParentese() {
+                // REGRA 4: Só permite fechar se houver pelo menos um parêntese aberto sem par
+                if (parentesesAbertos <= 0) {
+                    return;
+                }
+
+                const numAtual = entradaAtual.endsWith(".") ? entradaAtual.slice(0, -1) : entradaAtual;
+                const numVisual = formatarParaPtBR(numAtual);
+
+                // Se estava esperando um número após um operador, fecha com o número atual
+                if (aguardandoNovoNumero && expressaoPendente.trim().endsWith("(")) {
+                    expressaoPendente += `${numAtual} )`;
+                    expressaoExibicao += `${numVisual} )`;
+                } else {
+                    expressaoPendente += `${numAtual} )`;
+                    expressaoExibicao += `${numVisual} )`;
+                }
+
+                parentesesAbertos--;
+                aguardandoNovoNumero = true;
+                atualizarVisor();
+            }
+
+            /**
+             * Calcula Porcentagem (%)
+             */
+            function calcularPorcentagem() {
+                const valor = parseFloat(entradaAtual);
+                if (isNaN(valor)) return;
+
+                // Se estiver dentro de uma expressão (ex: 200 + 10%), 10% é 10% de 200 = 20
+                if (operadorPendente !== null && expressaoPendente) {
+                    try {
+                        const baseMatch = expressaoPendente.match(/([0-9.]+)\s*[\+\-\*\/]\s*$/);
+                        if (baseMatch) {
+                            const base = parseFloat(baseMatch[1]);
+                            const resultadoPct = (base * valor) / 100;
+                            entradaAtual = resultadoPct.toString();
+                            atualizarVisor();
+                            return;
+                        }
+                    } catch (e) { }
+                }
+
+                // Cálculo isolado de porcentagem: valor / 100
+                entradaAtual = (valor / 100).toString();
+                atualizarVisor();
+            }
+
+            /**
+             * Calcula Raiz Quadrada (√)
+             */
+            function calcularRaiz() {
+                const valor = parseFloat(entradaAtual);
+                if (valor < 0) {
+                    entradaAtual = "Erro";
+                    atualizarVisor();
+                    return;
+                }
+                const resultado = Math.sqrt(valor);
+                entradaAtual = Number.isInteger(resultado) ? resultado.toString() : parseFloat(resultado.toFixed(8)).toString();
+                resultadoFinalExibido = true;
+                atualizarVisor();
+            }
+
+            /**
+             * Apaga o último dígito (Backspace)
+             */
+            function apagarDigito() {
+                if (resultadoFinalExibido || aguardandoNovoNumero) return;
+
+                if (entradaAtual.length <= 1 || (entradaAtual.length === 2 && entradaAtual.startsWith("-"))) {
+                    entradaAtual = "0";
+                } else {
+                    entradaAtual = entradaAtual.slice(0, -1);
+                }
+                atualizarVisor();
+            }
+
+            /**
+             * CE - Limpa a Entrada Atual (Clear Entry)
              */
             function limparEntrada() {
-                expressaoAtual = "";
-                atualizarDisplay();
+                entradaAtual = "0";
+                atualizarVisor();
             }
 
             /**
-             * Apaga o último caractere digitado (Backspace)
+             * C - Limpa Tudo (Clear)
              */
-            function apagarUltimo() {
-                if (resultadoCalculado) {
-                    limparTudo();
+            function limparTudo() {
+                entradaAtual = "0";
+                expressaoPendente = "";
+                expressaoExibicao = "";
+                operadorPendente = null;
+                aguardandoNovoNumero = false;
+                resultadoFinalExibido = false;
+                parentesesAbertos = 0;
+                atualizarVisor();
+            }
+
+            /**
+             * Realiza a avaliação matemática final com a função nativa eval()
+             */
+            function calcularResultadoFinal() {
+                if (resultadoFinalExibido) return;
+
+                let expressaoParaAvaliar = expressaoPendente;
+
+                // Se não havia operador pendente nem parênteses, apenas exibe
+                if (expressaoPendente === "" && parentesesAbertos === 0) {
+                    expressaoExibicao = `${formatarParaPtBR(entradaAtual)} =`;
+                    resultadoFinalExibido = true;
+                    atualizarVisor();
                     return;
                 }
-                expressaoAtual = expressaoAtual.slice(0, -1);
-                atualizarDisplay();
-            }
 
-            /**
-             * Executa a avaliação da expressão matemática usando eval() de forma segura e validada
-             */
-            function calcularResultado() {
-                if (!expressaoAtual.trim()) return;
+                // Se a expressão não terminou com parêntese fechado, adiciona o número atual
+                if (!expressaoPendente.trim().endsWith(")")) {
+                    expressaoParaAvaliar += entradaAtual;
+                    expressaoExibicao += formatarParaPtBR(entradaAtual);
+                }
 
-                // 1. Validação de Segurança Estrita: impede injeção de código arbitrário
-                if (!REGEX_CARACTERES_PERMITIDOS.test(expressaoAtual)) {
-                    displayPrincipal.textContent = "Erro de Segurança";
-                    expressaoHistorico.textContent = "Caracteres inválidos detectados!";
-                    expressaoAtual = "";
-                    resultadoCalculado = true;
+                // Fecha automaticamente qualquer parêntese que tenha ficado aberto
+                while (parentesesAbertos > 0) {
+                    expressaoParaAvaliar += " )";
+                    expressaoExibicao += " )";
+                    parentesesAbertos--;
+                }
+
+                expressaoExibicao += " =";
+
+                // 1. Sanitização estrita de segurança antes de invocar eval()
+                if (!REGEX_SEGURANCA_EVAL.test(expressaoParaAvaliar)) {
+                    entradaAtual = "Erro de Segurança";
+                    resultadoFinalExibido = true;
+                    atualizarVisor();
                     return;
                 }
 
                 try {
-                    // Guarda a expressão original para exibir no histórico
-                    const expressaoParaHistorico = expressaoAtual
-                        .replace(/\*/g, "×")
-                        .replace(/\//g, "÷");
-
-                    // 2. Avaliação da expressão usando a função nativa eval()
+                    // 2. Avaliação segura com eval()
                     // eslint-disable-next-line no-eval
-                    let resultado = eval(expressaoAtual);
+                    let resultado = eval(expressaoParaAvaliar);
 
-                    // 3. Tratamento de divisão por zero ou resultados não numéricos
-                    if (!isFinite(resultado)) {
-                        displayPrincipal.textContent = "Divisão por Zero";
-                        expressaoHistorico.textContent = `${expressaoParaHistorico} =`;
-                        expressaoAtual = "";
-                        resultadoCalculado = true;
+                    // 3. Tratamento de divisão por zero ou infinito
+                    if (!isFinite(resultado) || isNaN(resultado)) {
+                        entradaAtual = "Divisão por Zero";
+                        resultadoFinalExibido = true;
+                        atualizarVisor();
                         return;
                     }
 
-                    // Arredonda casas decimais extensas para evitar problemas de precisão de ponto flutuante
+                    // Limita casas decimais para precisão de ponto flutuante
                     if (Number.isInteger(resultado)) {
-                        resultado = resultado.toString();
+                        entradaAtual = resultado.toString();
                     } else {
-                        resultado = parseFloat(resultado.toFixed(8)).toString();
+                        entradaAtual = parseFloat(resultado.toFixed(10)).toString();
                     }
 
-                    expressaoHistorico.textContent = `${expressaoParaHistorico} =`;
-                    expressaoAtual = resultado;
-                    displayPrincipal.textContent = resultado;
-                    resultadoCalculado = true;
+                    resultadoFinalExibido = true;
+                    expressaoPendente = "";
+                    operadorPendente = null;
+                    atualizarVisor();
 
                 } catch (erro) {
-                    // Captura erros de sintaxe matemática (ex: parênteses abertos sem fechar, etc.)
-                    displayPrincipal.textContent = "Erro de Sintaxe";
-                    expressaoHistorico.textContent = "Expressão matemática incompleta";
-                    expressaoAtual = "";
-                    resultadoCalculado = true;
+                    entradaAtual = "Erro de Sintaxe";
+                    resultadoFinalExibido = true;
+                    atualizarVisor();
                 }
             }
 
-            // Ouvinte de cliques nos botões da calculadora
+            // Ouvinte de cliques nos botões
             botoes.forEach(botao => {
                 botao.addEventListener("click", () => {
-                    const valor = botao.getAttribute("data-valor");
+                    const num = botao.getAttribute("data-num");
+                    const op = botao.getAttribute("data-op");
                     const acao = botao.getAttribute("data-acao");
 
-                    if (valor !== null) {
-                        inserirCaractere(valor);
-                    } else if (acao === "calcular") {
-                        calcularResultado();
-                    } else if (acao === "limpar-tudo") {
-                        limparTudo();
+                    if (num !== null) {
+                        inserirDigito(num);
+                    } else if (op !== null) {
+                        aplicarOperador(op);
+                    } else if (acao === "virgula") {
+                        inserirVirgula();
+                    } else if (acao === "inverter-sinal") {
+                        inverterSinal();
+                    } else if (acao === "abre-parentese") {
+                        abrirParentese();
+                    } else if (acao === "fecha-parentese") {
+                        fecharParentese();
+                    } else if (acao === "porcentagem") {
+                        calcularPorcentagem();
+                    } else if (acao === "raiz") {
+                        calcularRaiz();
+                    } else if (acao === "apagar") {
+                        apagarDigito();
                     } else if (acao === "limpar-entrada") {
                         limparEntrada();
-                    } else if (acao === "apagar") {
-                        apagarUltimo();
+                    } else if (acao === "limpar-tudo") {
+                        limparTudo();
+                    } else if (acao === "calcular") {
+                        calcularResultadoFinal();
                     }
                 });
             });
 
-            // Ouvinte de teclado físico para suporte e acessibilidade completa
+            // Ouvinte de teclado físico com suporte a pt-BR
             window.addEventListener("keydown", (evento) => {
                 const tecla = evento.key;
 
                 if (/[0-9]/.test(tecla)) {
-                    inserirCaractere(tecla);
-                } else if (["+", "-", "*", "/", "(", ")", "%", "."].includes(tecla)) {
-                    inserirCaractere(tecla);
+                    inserirDigito(tecla);
+                } else if (tecla === "," || tecla === ".") {
+                    evento.preventDefault();
+                    inserirVirgula();
+                } else if (["+", "-", "*", "/"].includes(tecla)) {
+                    evento.preventDefault();
+                    aplicarOperador(tecla);
+                } else if (tecla === "(") {
+                    evento.preventDefault();
+                    abrirParentese();
+                } else if (tecla === ")") {
+                    evento.preventDefault();
+                    fecharParentese();
+                } else if (tecla === "%") {
+                    evento.preventDefault();
+                    calcularPorcentagem();
                 } else if (tecla === "Enter" || tecla === "=") {
                     evento.preventDefault();
-                    calcularResultado();
+                    calcularResultadoFinal();
                 } else if (tecla === "Backspace") {
-                    apagarUltimo();
+                    evento.preventDefault();
+                    apagarDigito();
                 } else if (tecla === "Escape") {
+                    evento.preventDefault();
                     limparTudo();
                 }
             });
+
+            // Inicializa visor
+            atualizarVisor();
         });
     </script>
 </body>
