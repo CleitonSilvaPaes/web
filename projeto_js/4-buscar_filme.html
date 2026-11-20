@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 4 - Buscador de Filmes OMDb AJAX | IFSC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0d253f;
+            --card-bg: #091c2e;
+            --border-color: #1c3d5a;
+            --accent-blue: #01b4e4;
+            --accent-blue-hover: #0096c7;
+            --accent-green: #90cea1;
+            --text-main: #ffffff;
+            --text-muted: #8bb2d6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 30px 20px 60px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Topo e Navegação */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(1, 180, 228, 0.1);
+            border: 1px solid rgba(1, 180, 228, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-voltar:hover {
+            background: rgba(1, 180, 228, 0.2);
+            transform: translateX(-3px);
+        }
+
+        .tag-atividade {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--accent-green);
+            background: rgba(144, 206, 161, 0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(144, 206, 161, 0.25);
+        }
+
+        h1 {
+            font-size: clamp(26px, 4vw, 34px);
+            margin-bottom: 8px;
+            color: var(--accent-blue);
+            font-weight: 800;
+        }
+
+        .subtitulo {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 260px;
+            max-width: 500px;
+            padding: 12px 16px;
+            font-size: 15px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(1, 180, 228, 0.2);
+        }
+
+        button {
+            padding: 12px 26px;
+            font-size: 15px;
+            font-weight: 600;
+            background-color: var(--accent-blue);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: var(--accent-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .status {
+            font-size: 14px;
+            color: var(--accent-green);
+            margin-bottom: 24px;
+            min-height: 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 12px 28px rgba(1, 180, 228, 0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: #122b44;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin: 12px 0 6px 0;
+            color: #ffffff;
+            line-height: 1.35;
+            font-weight: 700;
+        }
+
+        .meta-info {
+            font-size: 13px;
+            color: var(--accent-green);
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .genre {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .plot {
+            font-size: 12px;
+            color: #cfd8dc;
+            line-height: 1.5;
+            margin-top: auto;
+            overflow: hidden;
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Navegação Superior -->
+        <nav class="top-nav">
+            <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+            <div class="tag-atividade">IFSC • Avaliação 2 • Atividade 4</div>
+        </nav>
+
+        <header>
+            <h1>Busca de Filmes com AJAX</h1>
+            <p class="subtitulo">
+                Consulta em tempo real à API externa do OMDb utilizando requisições assíncronas (<code>fetch</code> com
+                <code>async/await</code> e <code>Promise.all</code>).
+            </p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="movieInput" placeholder="Ex: Interstellar, Batman, O Auto da Compadecida..." />
+            <button id="searchBtn">🔍 Buscar Filmes</button>
+        </div>
+
+        <div id="statusMessage" class="status"></div>
+        <div id="results"></div>
+
+        <footer>
+            IFSC • Câmpus Lages • Disciplina: Programação para Internet I • Prof. Romulo Beninca • Alunos: Cleiton Paes | Izaque Carlos
+            Paes
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * Módulo de Consulta AJAX à API OMDb
+         * Utiliza requisições paralelas com Promise.all para carregar detalhes e sinopses em tempo hábil.
+         */
+        const API_KEY = "c519747e";
+        const BASE_URL = "https://www.omdbapi.com/";
+
+        const searchBtn = document.getElementById("searchBtn");
+        const movieInput = document.getElementById("movieInput");
+        const resultsContainer = document.getElementById("results");
+        const statusMessage = document.getElementById("statusMessage");
+
+        movieInput.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                buscarFilmes();
+            }
+        });
+
+        searchBtn.addEventListener("click", buscarFilmes);
+
+        async function buscarFilmes() {
+            const termo = movieInput.value.trim();
+
+            if (!termo) {
+                statusMessage.textContent = "⚠️ Por favor, digite o título de um filme.";
+                resultsContainer.innerHTML = "";
+                return;
+            }
+
+            statusMessage.textContent = "⏳ Consultando catálogo OMDb...";
+            resultsContainer.innerHTML = "";
+
+            try {
+                // 1ª Requisição AJAX: busca a lista correspondente
+                const searchRes = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(termo)}`);
+                const searchData = await searchRes.json();
+
+                if (searchData.Response !== "True") {
+                    statusMessage.textContent = `❌ Nenhum filme encontrado: ${searchData.Error || "Tente outro título."}`;
+                    return;
+                }
+
+                statusMessage.textContent = `🔄 Carregando detalhes de ${searchData.Search.length} títulos...`;
+
+                // 2ª Requisição AJAX (paralela): puxa sinopse, gênero e nota de cada filme retornado
+                const detalhesPromises = searchData.Search.map((filme) =>
+                    fetch(`${BASE_URL}?apikey=${API_KEY}&i=${filme.imdbID}&plot=short`)
+                        .then((res) => res.json())
+                        .catch(() => ({
+                            Title: filme.Title,
+                            Year: filme.Year,
+                            Poster: filme.Poster,
+                            imdbRating: "N/A",
+                            Genre: "N/A",
+                            Plot: "Não foi possível carregar a sinopse."
+                        }))
+                );
+
+                const filmesDetalhados = await Promise.all(detalhesPromises);
+
+                statusMessage.textContent = `✓ Exibindo ${filmesDetalhados.length} resultados encontrados:`;
+                renderizarCards(filmesDetalhados);
+
+            } catch (error) {
+                console.error("Falha na requisição AJAX:", error);
+                statusMessage.textContent = "❌ Erro ao buscar filmes. Verifique sua conexão com a internet.";
+            }
+        }
+
+        function renderizarCards(filmes) {
+            resultsContainer.innerHTML = "";
+
+            filmes.forEach((filme) => {
+                const card = document.createElement("div");
+                card.className = "card";
+
+                const poster = (filme.Poster && filme.Poster !== "N/A")
+                    ? filme.Poster
+                    : "https://via.placeholder.com/300x450/091c2e/8bb2d6?text=Sem+Poster";
+
+                const notaImdb = filme.imdbRating && filme.imdbRating !== "N/A"
+                    ? `⭐ ${filme.imdbRating} / 10`
+                    : "Nota indisponível";
+
+                const sinopse = filme.Plot && filme.Plot !== "N/A"
+                    ? filme.Plot
+                    : "Sinopse não disponível para este título.";
+
+                card.innerHTML = `
+                    <img src="${poster}" alt="Pôster de ${filme.Title}" onerror="this.src='https://via.placeholder.com/300x450/091c2e/8bb2d6?text=Imagem+Indisponível'" />
+                    <h3>${filme.Title}</h3>
+                    <div class="meta-info">${filme.Year} • ${notaImdb}</div>
+                    <div class="genre">${filme.Genre || filme.Type || "Filme"}</div>
+                    <p class="plot" title="${sinopse}">${sinopse}</p>
+                `;
+
+                resultsContainer.appendChild(card);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação 2 JavaScript - Calculadora, Cronômetro, Bloco de Notas e AJAX | IFSC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --badge-bg: rgba(59, 130, 246, 0.15);
+            --badge-text: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(6, 182, 212, 0.08) 0px, transparent 60%);
+            background-attachment: fixed;
+            padding: 50px 20px 80px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .tag-curso {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(30px, 4.5vw, 44px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .meta-info {
+            display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-card);
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .meta-info strong {
+            color: #e2e8f0;
+        }
+
+        /* Grid de Cards das Atividades */
+        .grid-atividades {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-numero {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.12);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .card-nota {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-emerald);
+            background: rgba(16, 185, 129, 0.12);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .card-icone {
+            font-size: 24px;
+        }
+
+        .card h2 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.35;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .card-tag {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .btn-abrir {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            width: 100%;
+        }
+
+        .btn-abrir:hover {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35);
+            transform: scale(1.02);
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-card);
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="tag-curso">IFSC • Câmpus Lages • PPI-I</div>
+            <h1>Avaliação 2 — JavaScript: DOM, Timers, LocalStorage &amp; AJAX</h1>
+
+            <div class="meta-info">
+                <span>Professor: <strong>Romulo Beninca</strong></span>
+                <span>Alunos: <strong>Cleiton Paes | Izaque Carlos</strong></span>
+                <span>Disciplina: <strong>Programação para Internet 1</strong></span>
+            </div>
+        </header>
+
+        <main class="grid-atividades">
+
+            <!-- Atividade 1 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 1</span>
+                        <span class="card-nota">Nota: 2.0</span>
+                    </div>
+                    <h2>Calculadora Simples (eval)</h2>
+                    <p>
+                        Calculadora com as 4 operações básicas (+, -, *, /) avaliada via <code>eval()</code>, com regex
+                        estrito para sanitização e bloqueio. Além de suporte total ao teclado físico.
+                    </p>
+                    <div class="card-tags">
+                        <span class="card-tag">1-calculadora.html</span>
+                        <span class="card-tag">eval()</span>
+                        <span class="card-tag">Regex Sanitizer</span>
+                        <span class="card-tag">try...catch</span>
+                    </div>
+                </div>
+                <a href="1-calculadora.html" class="btn-abrir">Visualizar Atividade 1 →</a>
+            </div>
+
+            <!-- Atividade 2 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 2</span>
+                        <span class="card-nota">Nota: 2.0</span>
+                    </div>
+                    <h2>Cronômetro de Alta Precisão</h2>
+                    <p>
+                        Cronômetro imune ao <em>timer drift</em> utilizando timestamps da classe <code>Date</code> do
+                        sistema, atualização fluida via <code>setInterval</code>, lista persistida de pausas e atalhos
+                        rápidos de teclado.
+                    </p>
+                    <div class="card-tags">
+                        <span class="card-tag">2-cronometro.html</span>
+                        <span class="card-tag">new Date()</span>
+                        <span class="card-tag">setInterval</span>
+                        <span class="card-tag">Atalhos (Espaço/Z/V)</span>
+                    </div>
+                </div>
+                <a href="2-cronometro.html" class="btn-abrir">Visualizar Atividade 2 →</a>
+            </div>
+
+            <!-- Atividade 3 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 3</span>
+                        <span class="card-nota">Nota: 2.0</span>
+                    </div>
+                    <h2>Bloco de Notas com LocalStorage</h2>
+                    <p>
+                        Aplicação CRUD para gerenciar notas em formato JSON via <code>localStorage</code>, estruturada
+                        com classe <code>Nota</code>, busca reativa em tempo real e diálogo de confirmação prévia para
+                        exclusão.
+                    </p>
+                    <div class="card-tags">
+                        <span class="card-tag">3-bloco-notas.html</span>
+                        <span class="card-tag">localStorage</span>
+                        <span class="card-tag">JSON</span>
+                        <span class="card-tag">class Nota</span>
+                        <span class="card-tag">Confirmação</span>
+                    </div>
+                </div>
+                <a href="3-bloco-notas.html" class="btn-abrir">Visualizar Atividade 3 →</a>
+            </div>
+
+            <!-- Atividade 4 -->
+            <div class="card">
+                <div>
+                    <div class="card-topo">
+                        <span class="card-numero">ATIVIDADE 4</span>
+                        <span class="card-nota">Nota: 2.0</span>
+                    </div>
+                    <h2>Busca de Filmes com AJAX</h2>
+                    <p>
+                        Consulta assíncrona ao catálogo do OMDb utilizando requisições <code>fetch()</code>, exibindo
+                        pôster, título, ano, gênero, classificação IMDb e sinopse detalhada com tratamento dinâmico de
+                        erros.
+                    </p>
+                    <div class="card-tags">
+                        <span class="card-tag">4-buscar_filme.html</span>
+                        <span class="card-tag">fetch() / AJAX</span>
+                        <span class="card-tag">OMDb API</span>
+                        <span class="card-tag">Async/Await</span>
+                    </div>
+                </div>
+                <a href="4-buscar_filme.html" class="btn-abrir">Visualizar Atividade 4 →</a>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>Instituto Federal de Santa Catarina — Câmpus Lages • Programação para Internet I • 2026</p>
+        </footer>
+    </div>
+</body>
+
+</html>
