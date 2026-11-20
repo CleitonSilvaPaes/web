@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 3 - Bloco de Notas com LocalStorage | IFSC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --editor-bg: #111827;
+            --item-hover: rgba(59, 130, 246, 0.1);
+            --item-active: rgba(59, 130, 246, 0.2);
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding: 30px 20px 60px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Topo e Navegação */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-voltar:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: translateX(-3px);
+        }
+
+        .tag-atividade {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-card);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: clamp(26px, 4vw, 36px);
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitulo {
+            color: var(--text-muted);
+            font-size: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Layout em Duas Colunas: Lista Lateral + Editor */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            min-height: 560px;
+        }
+
+        @media (min-width: 768px) {
+            .app-layout {
+                grid-template-columns: 340px 1fr;
+            }
+        }
+
+        /* Coluna da Esquerda: Barra de Busca, Ações e Lista de Notas */
+        .painel-lateral {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .painel-lateral {
+                border-bottom: none;
+                border-right: 1px solid var(--border-card);
+                padding-bottom: 0;
+                padding-right: 20px;
+            }
+        }
+
+        .acoes-topo {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn-nova-nota {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+            color: #ffffff;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-nova-nota:hover {
+            background: linear-gradient(135deg, #60a5fa, var(--accent-blue));
+            transform: translateY(-2px);
+        }
+
+        .campo-busca {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .input-busca {
+            width: 100%;
+            background: #030712;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 14px 10px 34px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-busca:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .icone-busca {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .cabecalho-lista {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Lista de Notas */
+        .lista-notas {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 440px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .lista-notas::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .lista-notas::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .item-nota {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .item-nota:hover {
+            background: var(--item-hover);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateX(2px);
+        }
+
+        .item-nota.ativa {
+            background: var(--item-active);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 1px var(--accent-blue);
+        }
+
+        .item-nota-titulo {
+            font-weight: 600;
+            font-size: 14px;
+            color: #ffffff;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-nota-prev {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 8px;
+        }
+
+        .item-nota-data {
+            font-size: 11px;
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .vazio-mensagem {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px 10px;
+            font-size: 13px;
+        }
+
+        /* Coluna da Direita: Editor de Notas */
+        .painel-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .editor-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 14px;
+        }
+
+        .input-titulo {
+            flex: 1;
+            min-width: 200px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .input-titulo::placeholder {
+            color: #475569;
+        }
+
+        .acoes-editor {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-acao-editor {
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-salvar {
+            background-color: var(--success);
+            color: #ffffff;
+        }
+
+        .btn-salvar:hover {
+            background-color: #059669;
+            transform: scale(1.02);
+        }
+
+        .btn-excluir {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-excluir:hover {
+            background-color: var(--danger);
+            color: #ffffff;
+        }
+
+        .meta-editor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .textarea-conteudo {
+            flex: 1;
+            min-height: 320px;
+            background: #030712;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            color: #f1f5f9;
+            font-size: 15px;
+            line-height: 1.6;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .textarea-conteudo:focus {
+            border-color: var(--accent-blue);
+        }
+
+        /* Notificação Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: #ffffff;
+            border: 1px solid var(--border-card);
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .toast.ativo {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* Modal de Confirmação para Exclusão */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.ativo {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #111827;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            max-width: 440px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.ativo .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-card h3 {
+            font-size: 18px;
+            color: #ef4444;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .modal-acoes {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-modal-cancelar {
+            background: #1f2937;
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-modal-confirmar {
+            background: var(--danger);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-modal-confirmar:hover {
+            background: var(--danger-hover);
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Navegação Superior -->
+        <nav class="top-nav">
+            <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+            <div class="tag-atividade">IFSC • Avaliação 2 • Atividade 3</div>
+        </nav>
+
+        <header>
+            <h1>Bloco de Notas JS</h1>
+            <p class="subtitulo">
+                Gerenciador de notas com persistência em <code>localStorage</code>, serialização em JSON,
+                estrutura orientada a objetos (classe <code>Nota</code>) e confirmação de exclusão.
+            </p>
+        </header>
+
+        <div class="app-layout">
+            <!-- Coluna 1: Painel Lateral com Lista de Notas -->
+            <aside class="painel-lateral">
+                <div class="acoes-topo">
+                    <button type="button" id="btnNovaNota" class="btn-nova-nota">
+                        <span>＋</span> Nova Nota
+                    </button>
+                </div>
+
+                <!-- Campo de Pesquisa -->
+                <div class="campo-busca">
+                    <span class="icone-busca">🔍</span>
+                    <input type="text" id="inputBusca" class="input-busca" placeholder="Pesquisar nas notas..." />
+                </div>
+
+                <div class="cabecalho-lista">
+                    <span>Minhas Notas</span>
+                    <span id="contadorNotas">0 notas</span>
+                </div>
+
+                <!-- Lista de Notas Renderizada -->
+                <ul class="lista-notas" id="listaNotas">
+                    <!-- Renderizado dinamicamente via JS -->
+                </ul>
+            </aside>
+
+            <!-- Coluna 2: Editor de Texto -->
+            <main class="painel-editor">
+                <div class="editor-topo">
+                    <input type="text" id="inputTitulo" class="input-titulo" placeholder="Título da nota..." />
+                    <div class="acoes-editor">
+                        <button type="button" id="btnSalvarNota" class="btn-acao-editor btn-salvar">
+                            💾 Salvar Nota
+                        </button>
+                        <button type="button" id="btnExcluirNota" class="btn-acao-editor btn-excluir" title="Excluir Nota Selecionada">
+                            🗑️ Excluir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="meta-editor">
+                    <span id="infoDatas">Nota não salva</span>
+                    <span id="contadorCaracteres">0 caracteres • 0 palavras</span>
+                </div>
+
+                <textarea id="textareaConteudo" class="textarea-conteudo" placeholder="Digite seu texto aqui..."></textarea>
+            </main>
+        </div>
+
+        <footer>
+            IFSC • Câmpus Lages • Disciplina: Programação para Internet I • Prof. Romulo Beninca • Alunos: Cleiton Paes | Izaque Carlos
+    </div>
+
+    <!-- Modal de Confirmação para Exclusão (Requisito Explícito) -->
+    <div class="modal-overlay" id="modalConfirmacao" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <h3>⚠️ Confirmar Exclusão</h3>
+            <p id="msgConfirmacao">Tem certeza de que deseja excluir esta nota? Esta ação é irreversível.</p>
+            <div class="modal-acoes">
+                <button type="button" id="btnCancelarExclusao" class="btn-modal-cancelar">Cancelar</button>
+                <button type="button" id="btnConfirmarExclusao" class="btn-modal-confirmar">Excluir Nota</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div class="toast" id="toastNotificacao" role="alert"></div>
+
+    <!-- Script do Bloco de Notas -->
+    <script>
+        /**
+         * Classe Nota
+         * Representa a entidade da nota conforme exigido nas especificações do projeto
+         */
+        class Nota {
+            constructor(id = null, titulo = "", conteudo = "", dataCriacao = null, dataModificacao = null) {
+                this.id = id || "nota_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+                this.titulo = titulo.trim() || "Nota sem título";
+                this.conteudo = conteudo;
+                this.dataCriacao = dataCriacao || new Date().toISOString();
+                this.dataModificacao = dataModificacao || new Date().toISOString();
+            }
+
+            atualizar(titulo, conteudo) {
+                this.titulo = titulo.trim() || "Nota sem título";
+                this.conteudo = conteudo;
+                this.dataModificacao = new Date().toISOString();
+            }
+        }
+
+        /**
+         * Módulo Gerenciador do Bloco de Notas
+         */
+        document.addEventListener("DOMContentLoaded", () => {
+            const CHAVE_STORAGE = "ifsc_bloco_notas_dados";
+
+            // Elementos da interface
+            const listaNotasEl = document.getElementById("listaNotas");
+            const contadorNotasEl = document.getElementById("contadorNotas");
+            const inputBusca = document.getElementById("inputBusca");
+            const btnNovaNota = document.getElementById("btnNovaNota");
+
+            const inputTitulo = document.getElementById("inputTitulo");
+            const textareaConteudo = document.getElementById("textareaConteudo");
+            const btnSalvarNota = document.getElementById("btnSalvarNota");
+            const btnExcluirNota = document.getElementById("btnExcluirNota");
+            const infoDatas = document.getElementById("infoDatas");
+            const contadorCaracteres = document.getElementById("contadorCaracteres");
+
+            const modalConfirmacao = document.getElementById("modalConfirmacao");
+            const btnCancelarExclusao = document.getElementById("btnCancelarExclusao");
+            const btnConfirmarExclusao = document.getElementById("btnConfirmarExclusao");
+            const msgConfirmacao = document.getElementById("msgConfirmacao");
+            const toast = document.getElementById("toastNotificacao");
+
+            // Estado da Aplicação
+            let listaNotas = [];
+            let notaSelecionadaId = null;
+
+            /**
+             * Formata data ISO para pt-BR legível
+             */
+            function formatarData(isoString) {
+                if (!isoString) return "";
+                const data = new Date(isoString);
+                return data.toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+            }
+
+            /**
+             * Exibe notificação temporária toast
+             */
+            function exibirToast(mensagem, cor = "var(--success)") {
+                toast.textContent = mensagem;
+                toast.style.borderColor = cor;
+                toast.classList.add("ativo");
+                setTimeout(() => {
+                    toast.classList.remove("ativo");
+                }, 3000);
+            }
+
+            /**
+             * Carrega as notas salvas no localStorage
+             */
+            function carregarNotasDoStorage() {
+                try {
+                    const dados = localStorage.getItem(CHAVE_STORAGE);
+                    if (dados) {
+                        const listaJson = JSON.parse(dados);
+                        // Reconstrói instâncias da classe Nota a partir do JSON
+                        listaNotas = listaJson.map(obj => new Nota(
+                            obj.id,
+                            obj.titulo,
+                            obj.conteudo,
+                            obj.dataCriacao,
+                            obj.dataModificacao
+                        ));
+                    } else {
+                        // Notas de boas-vindas iniciais se for o primeiro acesso
+                        criarNotasExemplo();
+                    }
+                } catch (e) {
+                    console.error("Erro ao carregar dados do LocalStorage:", e);
+                    listaNotas = [];
+                }
+            }
+
+            /**
+             * Salva a lista de notas atualizada no localStorage em formato JSON
+             */
+            function salvarNotasNoStorage() {
+                try {
+                    localStorage.setItem(CHAVE_STORAGE, JSON.stringify(listaNotas));
+                } catch (e) {
+                    console.error("Erro ao salvar no LocalStorage:", e);
+                    exibirToast("Erro ao salvar no navegador!", "var(--danger)");
+                }
+            }
+
+            /**
+             * Cria notas de exemplo para enriquecer o primeiro acesso do usuário
+             */
+            function criarNotasExemplo() {
+                const n1 = new Nota(
+                    "nota_exemplo_1",
+                    "Bem-vindo ao Bloco de Notas IFSC",
+                    "Esta aplicação foi desenvolvida em JavaScript puro para a Avaliação 2 de PPI-I.\n\nPrincipais recursos:\n- Persistência com LocalStorage em formato JSON\n- Estrutura de dados orientada a objetos (classe Nota)\n- Busca rápida em tempo real\n- Diálogo de confirmação para exclusão segura",
+                    new Date().toISOString(),
+                    new Date().toISOString()
+                );
+                listaNotas = [n1];
+                salvarNotasNoStorage();
+            }
+
+            /**
+             * Renderiza a lista de notas filtrada ou completa
+             */
+            function renderizarListaNotas(filtro = "") {
+                const termo = filtro.trim().toLowerCase();
+                const notasFiltradas = listaNotas.filter(n =>
+                    n.titulo.toLowerCase().includes(termo) ||
+                    n.conteudo.toLowerCase().includes(termo)
+                );
+
+                contadorNotasEl.textContent = `${notasFiltradas.length} nota${notasFiltradas.length === 1 ? "" : "s"}`;
+
+                if (notasFiltradas.length === 0) {
+                    listaNotasEl.innerHTML = '<li class="vazio-mensagem">Nenhuma nota encontrada.</li>';
+                    return;
+                }
+
+                listaNotasEl.innerHTML = notasFiltradas.map(nota => {
+                    const ativa = (nota.id === notaSelecionadaId) ? "ativa" : "";
+                    const prevTexto = nota.conteudo ? nota.conteudo.replace(/\n/g, " ") : "Sem conteúdo";
+                    return `
+                        <li class="item-nota ${ativa}" data-id="${nota.id}">
+                            <div class="item-nota-titulo">${nota.titulo}</div>
+                            <div class="item-nota-prev">${prevTexto}</div>
+                            <div class="item-nota-data">Atualizado: ${formatarData(nota.dataModificacao)}</div>
+                        </li>
+                    `;
+                }).join("");
+
+                // Adiciona ouvinte de clique em cada nota
+                listaNotasEl.querySelectorAll(".item-nota").forEach(item => {
+                    item.addEventListener("click", () => {
+                        const id = item.getAttribute("data-id");
+                        abrirNota(id);
+                    });
+                });
+            }
+
+            /**
+             * Carrega uma nota nos campos de edição
+             */
+            function abrirNota(id) {
+                const nota = listaNotas.find(n => n.id === id);
+                if (!nota) return;
+
+                notaSelecionadaId = nota.id;
+                inputTitulo.value = nota.titulo;
+                textareaConteudo.value = nota.conteudo;
+
+                infoDatas.textContent = `Criada em: ${formatarData(nota.dataCriacao)} | Atualizada: ${formatarData(nota.dataModificacao)}`;
+                atualizarContadores();
+                renderizarListaNotas(inputBusca.value);
+            }
+
+            /**
+             * Limpa o formulário para criar uma nova nota
+             */
+            function iniciarNovaNota() {
+                notaSelecionadaId = null;
+                inputTitulo.value = "";
+                textareaConteudo.value = "";
+                infoDatas.textContent = "Nova nota não salva";
+                atualizarContadores();
+                renderizarListaNotas(inputBusca.value);
+                inputTitulo.focus();
+            }
+
+            /**
+             * Salva a nota atual (seja nova criação ou edição existente)
+             */
+            function salvarNotaAtual() {
+                const titulo = inputTitulo.value.trim() || "Nota sem título";
+                const conteudo = textareaConteudo.value;
+
+                if (!titulo && !conteudo.trim()) {
+                    exibirToast("Não é possível salvar uma nota vazia!", "var(--danger)");
+                    return;
+                }
+
+                if (notaSelecionadaId) {
+                    // Edição de nota existente
+                    const nota = listaNotas.find(n => n.id === notaSelecionadaId);
+                    if (nota) {
+                        nota.atualizar(titulo, conteudo);
+                        exibirToast("Nota atualizada com sucesso!");
+                    }
+                } else {
+                    // Criação de nova nota
+                    const novaNota = new Nota(null, titulo, conteudo);
+                    listaNotas.unshift(novaNota);
+                    notaSelecionadaId = novaNota.id;
+                    exibirToast("Nota cadastrada com sucesso!");
+                }
+
+                salvarNotasNoStorage();
+                abrirNota(notaSelecionadaId);
+            }
+
+            /**
+             * Abre o modal de confirmação para exclusão da nota
+             */
+            function solicitarExclusaoNota() {
+                if (!notaSelecionadaId) {
+                    exibirToast("Selecione uma nota para excluir!", "var(--danger)");
+                    return;
+                }
+
+                const nota = listaNotas.find(n => n.id === notaSelecionadaId);
+                const tituloNota = nota ? `"${nota.titulo}"` : "esta nota";
+                msgConfirmacao.textContent = `Tem certeza de que deseja excluir permanentemente ${tituloNota}? Esta operação não pode ser desfeita.`;
+
+                modalConfirmacao.classList.add("ativo");
+            }
+
+            /**
+             * Concretiza a exclusão da nota após confirmação
+             */
+            function confirmarExclusao() {
+                if (!notaSelecionadaId) return;
+
+                listaNotas = listaNotas.filter(n => n.id !== notaSelecionadaId);
+                salvarNotasNoStorage();
+
+                modalConfirmacao.classList.remove("ativo");
+                exibirToast("Nota excluída com sucesso!", "#ef4444");
+
+                // Se restarem notas, abre a primeira; caso contrário, limpa a tela
+                if (listaNotas.length > 0) {
+                    abrirNota(listaNotas[0].id);
+                } else {
+                    iniciarNovaNota();
+                }
+            }
+
+            /**
+             * Atualiza os contadores de caracteres e palavras
+             */
+            function atualizarContadores() {
+                const texto = textareaConteudo.value;
+                const totalChars = texto.length;
+                const totalPalavras = texto.trim() ? texto.trim().split(/\s+/).length : 0;
+                contadorCaracteres.textContent = `${totalChars} caractere${totalChars === 1 ? "" : "s"} • ${totalPalavras} palavra${totalPalavras === 1 ? "" : "s"}`;
+            }
+
+            // Event Listeners
+            btnSalvarNota.addEventListener("click", salvarNotaAtual);
+            btnNovaNota.addEventListener("click", iniciarNovaNota);
+            btnExcluirNota.addEventListener("click", solicitarExclusaoNota);
+
+            btnCancelarExclusao.addEventListener("click", () => {
+                modalConfirmacao.classList.remove("ativo");
+            });
+
+            btnConfirmarExclusao.addEventListener("click", confirmarExclusao);
+
+            inputBusca.addEventListener("input", (e) => {
+                renderizarListaNotas(e.target.value);
+            });
+
+            textareaConteudo.addEventListener("input", atualizarContadores);
+
+            // Atalho Ctrl+S para salvar nota rapidamente
+            window.addEventListener("keydown", (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+                    e.preventDefault();
+                    salvarNotaAtual();
+                }
+            });
+
+            // Inicialização
+            carregarNotasDoStorage();
+            if (listaNotas.length > 0) {
+                abrirNota(listaNotas[0].id);
+            } else {
+                iniciarNovaNota();
+            }
+        });
+    </script>
+</body>
+
+</html>
+

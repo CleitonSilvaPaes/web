@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 1 - Calculadora Simples JS | IFSC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --calc-bg: #111827;
+            --btn-num: #1f2937;
+            --btn-num-hover: #374151;
+            --btn-op: #1e3a8a;
+            --btn-op-hover: #2563eb;
+            --btn-special: #374151;
+            --btn-special-hover: #4b5563;
+            --btn-equal: #059669;
+            --btn-equal-hover: #10b981;
+            --btn-clear: #991b1b;
+            --btn-clear-hover: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding: 30px 20px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Topo e Navegação */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-voltar:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: translateX(-3px);
+        }
+
+        .tag-atividade {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-card);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        h1 {
+            font-size: clamp(26px, 4vw, 36px);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitulo {
+            color: var(--text-muted);
+            font-size: 15px;
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Layout Grid: Calculadora + Painel Explicativo */
+        .conteudo-principal {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (min-width: 768px) {
+            .conteudo-principal {
+                grid-template-columns: 360px 1fr;
+            }
+        }
+
+        /* Container da Calculadora */
+        .calculadora {
+            background: var(--calc-bg);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Visor / Display */
+        .visor-container {
+            background: #030712;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: right;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .expressao-historico {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--text-muted);
+            min-height: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-bottom: 6px;
+        }
+
+        .display-principal {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            overflow-x: auto;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        /* Teclado da Calculadora */
+        .teclado {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn-calc {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            padding: 16px 0;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-calc:active {
+            transform: scale(0.95);
+        }
+
+        /* Cores dos Botões */
+        .btn-num {
+            background-color: var(--btn-num);
+            color: #f1f5f9;
+        }
+
+        .btn-num:hover {
+            background-color: var(--btn-num-hover);
+        }
+
+        .btn-op {
+            background-color: var(--btn-op);
+            color: #93c5fd;
+        }
+
+        .btn-op:hover {
+            background-color: var(--btn-op-hover);
+            color: #ffffff;
+        }
+
+        .btn-special {
+            background-color: var(--btn-special);
+            color: #e2e8f0;
+        }
+
+        .btn-special:hover {
+            background-color: var(--btn-special-hover);
+        }
+
+        .btn-clear {
+            background-color: var(--btn-clear);
+            color: #fca5a5;
+        }
+
+        .btn-clear:hover {
+            background-color: var(--btn-clear-hover);
+            color: #ffffff;
+        }
+
+        .btn-equal {
+            background-color: var(--btn-equal);
+            color: #ffffff;
+            grid-column: span 2;
+        }
+
+        .btn-equal:hover {
+            background-color: var(--btn-equal-hover);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Painel Lateral com Boas Práticas e Requisitos */
+        .painel-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .painel-info h2 {
+            font-size: 18px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 12px;
+        }
+
+        .painel-info h2 span {
+            font-size: 20px;
+        }
+
+        .lista-requisitos {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lista-requisitos li {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .check-icon {
+            color: #10b981;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .bloco-seguranca {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .bloco-seguranca strong {
+            color: var(--accent-cyan);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .atalhos-teclado {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        kbd {
+            background: #1f2937;
+            color: #f8fafc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Barra de Navegação Superior -->
+        <nav class="top-nav">
+            <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+            <div class="tag-atividade">IFSC • Avaliação 2 • Atividade 1</div>
+        </nav>
+
+        <header>
+            <h1>Calculadora Simples JS</h1>
+        </header>
+
+        <div class="conteudo-principal">
+            <!-- Calculadora Interativa -->
+            <main class="calculadora" aria-label="Calculadora Interativa">
+                <div class="visor-container">
+                    <div class="expressao-historico" id="expressaoHistorico" aria-live="polite"></div>
+                    <div class="display-principal" id="displayPrincipal" aria-live="assertive">0</div>
+                </div>
+
+                <div class="teclado">
+                    <!-- Linha 1 -->
+                    <button type="button" class="btn-calc btn-clear" data-acao="limpar-tudo"
+                        title="Limpar Tudo (Esc)">C</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="limpar-entrada"
+                        title="Limpar Entrada Atual">CE</button>
+                    <button type="button" class="btn-calc btn-special" data-acao="apagar"
+                        title="Apagar Último (Backspace)">⌫</button>
+                    <button type="button" class="btn-calc btn-op" data-valor="/" title="Divisão">÷</button>
+
+                    <!-- Linha 2 -->
+                    <button type="button" class="btn-calc btn-special" data-valor="(" title="Abre Parênteses">(</button>
+                    <button type="button" class="btn-calc btn-special" data-valor=")"
+                        title="Fecha Parênteses">)</button>
+                    <button type="button" class="btn-calc btn-special" data-valor="%" title="Porcentagem">%</button>
+                    <button type="button" class="btn-calc btn-op" data-valor="*" title="Multiplicação">×</button>
+
+                    <!-- Linha 3 -->
+                    <button type="button" class="btn-calc btn-num" data-valor="7">7</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="8">8</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="9">9</button>
+                    <button type="button" class="btn-calc btn-op" data-valor="-" title="Subtração">−</button>
+
+                    <!-- Linha 4 -->
+                    <button type="button" class="btn-calc btn-num" data-valor="4">4</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="5">5</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="6">6</button>
+                    <button type="button" class="btn-calc btn-op" data-valor="+" title="Adição">+</button>
+
+                    <!-- Linha 5 -->
+                    <button type="button" class="btn-calc btn-num" data-valor="1">1</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="2">2</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="3">3</button>
+                    <button type="button" class="btn-calc btn-num" data-valor="." title="Ponto Decimal">.</button>
+
+                    <!-- Linha 6 -->
+                    <button type="button" class="btn-calc btn-num" data-valor="0"
+                        style="grid-column: span 2;">0</button>
+                    <button type="button" class="btn-calc btn-equal" data-acao="calcular"
+                        title="Calcular Resultado (Enter)">=</button>
+                </div>
+            </main>
+
+            <!-- Painel de Especificações e Boas Práticas -->
+            <aside class="painel-info">
+                <h2><span>⌨️</span> Atalhos de Teclado</h2>
+                <div class="atalhos-teclado">
+                    <kbd>0 - 9</kbd> <span>Inserir dígitos</span>
+                    <kbd>+ - * /</kbd> <span>Operações aritméticas</span>
+                    <kbd>Enter</kbd> ou <kbd>=</kbd> <span>Calcular resultado</span>
+                    <kbd>Backspace</kbd> <span>Apagar último caractere</span>
+                    <kbd>Esc</kbd> <span>Limpar calculadora (C)</span>
+                </div>
+            </aside>
+        </div>
+
+        <footer>
+            IFSC • Câmpus Lages • Disciplina: Programação para Internet I • Prof. Romulo Beninca • Alunos: Cleiton Paes | Izaque Carlos
+            Paes
+        </footer>
+    </div>
+
+    <!-- Script da Calculadora -->
+    <script>
+        /**
+         * Módulo da Calculadora Simples
+         * Desenvolvido com boas práticas de segurança, validação e manipulação do DOM.
+         */
+        document.addEventListener("DOMContentLoaded", () => {
+            const displayPrincipal = document.getElementById("displayPrincipal");
+            const expressaoHistorico = document.getElementById("expressaoHistorico");
+            const botoes = document.querySelectorAll(".btn-calc");
+
+            let expressaoAtual = "";
+            let resultadoCalculado = false;
+
+            // Regex de sanitização: permite apenas dígitos, espaços e os operadores permitidos
+            const REGEX_CARACTERES_PERMITIDOS = /^[0-9+\-*/().\s%]+$/;
+
+            /**
+             * Atualiza o display principal da calculadora
+             */
+            function atualizarDisplay() {
+                if (expressaoAtual === "") {
+                    displayPrincipal.textContent = "0";
+                } else {
+                    // Substitui visualmente * e / por × e ÷ para melhor legibilidade
+                    displayPrincipal.textContent = expressaoAtual
+                        .replace(/\*/g, "×")
+                        .replace(/\//g, "÷");
+                }
+            }
+
+            /**
+             * Adiciona um caractere ou operador à expressão
+             * @param {string} valor
+             */
+            function inserirCaractere(valor) {
+                // Se o usuário acabou de obter um resultado e clica num número, inicia nova conta
+                if (resultadoCalculado) {
+                    if (/[0-9.]/.test(valor)) {
+                        expressaoAtual = "";
+                    }
+                    resultadoCalculado = false;
+                }
+
+                // Evita pontos decimais duplicados consecutivos
+                if (valor === "." && expressaoAtual.endsWith(".")) {
+                    return;
+                }
+
+                // Evita múltiplos operadores aritméticos consecutivos (exceto sinal de menos unário)
+                const ultCaractere = expressaoAtual.slice(-1);
+                const ehOperadorAtual = ["+", "-", "*", "/"].includes(valor);
+                const ultEhOperador = ["+", "-", "*", "/"].includes(ultCaractere);
+
+                if (ehOperadorAtual && ultEhOperador) {
+                    // Se o último já era operador e o novo também é, substitui pelo novo (exceto se for '-' após operador)
+                    if (valor !== "-" || ultCaractere === "-") {
+                        expressaoAtual = expressaoAtual.slice(0, -1) + valor;
+                        atualizarDisplay();
+                        return;
+                    }
+                }
+
+                // Tratamento especial para porcentagem: converte 'X%' em '(X/100)'
+                if (valor === "%") {
+                    if (expressaoAtual === "" || ultEhOperador) return;
+                    expressaoAtual += "/100";
+                    calcularResultado();
+                    return;
+                }
+
+                expressaoAtual += valor;
+                atualizarDisplay();
+            }
+
+            /**
+             * Limpa toda a expressão e histórico
+             */
+            function limparTudo() {
+                expressaoAtual = "";
+                expressaoHistorico.textContent = "";
+                resultadoCalculado = false;
+                atualizarDisplay();
+            }
+
+            /**
+             * Limpa a entrada atual mantendo o histórico anterior
+             */
+            function limparEntrada() {
+                expressaoAtual = "";
+                atualizarDisplay();
+            }
+
+            /**
+             * Apaga o último caractere digitado (Backspace)
+             */
+            function apagarUltimo() {
+                if (resultadoCalculado) {
+                    limparTudo();
+                    return;
+                }
+                expressaoAtual = expressaoAtual.slice(0, -1);
+                atualizarDisplay();
+            }
+
+            /**
+             * Executa a avaliação da expressão matemática usando eval() de forma segura e validada
+             */
+            function calcularResultado() {
+                if (!expressaoAtual.trim()) return;
+
+                // 1. Validação de Segurança Estrita: impede injeção de código arbitrário
+                if (!REGEX_CARACTERES_PERMITIDOS.test(expressaoAtual)) {
+                    displayPrincipal.textContent = "Erro de Segurança";
+                    expressaoHistorico.textContent = "Caracteres inválidos detectados!";
+                    expressaoAtual = "";
+                    resultadoCalculado = true;
+                    return;
+                }
+
+                try {
+                    // Guarda a expressão original para exibir no histórico
+                    const expressaoParaHistorico = expressaoAtual
+                        .replace(/\*/g, "×")
+                        .replace(/\//g, "÷");
+
+                    // 2. Avaliação da expressão usando a função nativa eval()
+                    // eslint-disable-next-line no-eval
+                    let resultado = eval(expressaoAtual);
+
+                    // 3. Tratamento de divisão por zero ou resultados não numéricos
+                    if (!isFinite(resultado)) {
+                        displayPrincipal.textContent = "Divisão por Zero";
+                        expressaoHistorico.textContent = `${expressaoParaHistorico} =`;
+                        expressaoAtual = "";
+                        resultadoCalculado = true;
+                        return;
+                    }
+
+                    // Arredonda casas decimais extensas para evitar problemas de precisão de ponto flutuante
+                    if (Number.isInteger(resultado)) {
+                        resultado = resultado.toString();
+                    } else {
+                        resultado = parseFloat(resultado.toFixed(8)).toString();
+                    }
+
+                    expressaoHistorico.textContent = `${expressaoParaHistorico} =`;
+                    expressaoAtual = resultado;
+                    displayPrincipal.textContent = resultado;
+                    resultadoCalculado = true;
+
+                } catch (erro) {
+                    // Captura erros de sintaxe matemática (ex: parênteses abertos sem fechar, etc.)
+                    displayPrincipal.textContent = "Erro de Sintaxe";
+                    expressaoHistorico.textContent = "Expressão matemática incompleta";
+                    expressaoAtual = "";
+                    resultadoCalculado = true;
+                }
+            }
+
+            // Ouvinte de cliques nos botões da calculadora
+            botoes.forEach(botao => {
+                botao.addEventListener("click", () => {
+                    const valor = botao.getAttribute("data-valor");
+                    const acao = botao.getAttribute("data-acao");
+
+                    if (valor !== null) {
+                        inserirCaractere(valor);
+                    } else if (acao === "calcular") {
+                        calcularResultado();
+                    } else if (acao === "limpar-tudo") {
+                        limparTudo();
+                    } else if (acao === "limpar-entrada") {
+                        limparEntrada();
+                    } else if (acao === "apagar") {
+                        apagarUltimo();
+                    }
+                });
+            });
+
+            // Ouvinte de teclado físico para suporte e acessibilidade completa
+            window.addEventListener("keydown", (evento) => {
+                const tecla = evento.key;
+
+                if (/[0-9]/.test(tecla)) {
+                    inserirCaractere(tecla);
+                } else if (["+", "-", "*", "/", "(", ")", "%", "."].includes(tecla)) {
+                    inserirCaractere(tecla);
+                } else if (tecla === "Enter" || tecla === "=") {
+                    evento.preventDefault();
+                    calcularResultado();
+                } else if (tecla === "Backspace") {
+                    apagarUltimo();
+                } else if (tecla === "Escape") {
+                    limparTudo();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

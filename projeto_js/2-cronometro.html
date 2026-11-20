@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 2 - Cronômetro de Alta Precisão JS | IFSC</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --green: #10b981;
+            --green-hover: #059669;
+            --yellow: #f59e0b;
+            --yellow-hover: #d97706;
+            --red: #ef4444;
+            --red-hover: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding: 30px 20px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+        }
+
+        /* Topo e Navegação */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-voltar:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: translateX(-3px);
+        }
+
+        .tag-atividade {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-card);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        h1 {
+            font-size: clamp(26px, 4vw, 36px);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitulo {
+            color: var(--text-muted);
+            font-size: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Layout Grid Principal */
+        .grid-conteudo {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (min-width: 820px) {
+            .grid-conteudo {
+                grid-template-columns: 1.15fr 0.85fr;
+            }
+        }
+
+        /* Painel Central do Cronômetro */
+        .card-cronometro {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Display Digital */
+        .display-cronometro {
+            background: #030712;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            padding: 32px 16px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .tempo-principal {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(34px, 6vw, 56px);
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .tempo-milis {
+            font-size: clamp(22px, 3.5vw, 36px);
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+        }
+
+        .status-badge.rodando {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.pausado {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Botões de Ação */
+        .controles-cronometro {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .btn-acao {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-acao:active {
+            transform: scale(0.96);
+        }
+
+        .btn-iniciar {
+            background-color: var(--green);
+        }
+
+        .btn-iniciar:hover {
+            background-color: var(--green-hover);
+        }
+
+        .btn-pausar {
+            background-color: var(--yellow);
+        }
+
+        .btn-pausar:hover {
+            background-color: var(--yellow-hover);
+        }
+
+        .btn-parar {
+            background-color: var(--red);
+        }
+
+        .btn-parar:hover {
+            background-color: var(--red-hover);
+        }
+
+        .btn-volta {
+            background-color: #374151;
+        }
+
+        .btn-volta:hover {
+            background-color: #4b5563;
+        }
+
+        .btn-acao:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Lista de Pausas / Voltas */
+        .historico-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .historico-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .historico-topo h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .btn-limpar-historico {
+            background: none;
+            border: none;
+            color: #f87171;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .btn-limpar-historico:hover {
+            color: #ef4444;
+        }
+
+        .lista-pausas {
+            list-style: none;
+            max-height: 220px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .lista-pausas::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .lista-pausas::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .item-pausa {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .item-pausa .num-pausa {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .item-pausa .hora-sistema {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .item-pausa .tempo-pausa {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .sem-pausas {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 20px 0;
+        }
+
+        /* Painel Lateral Informativo */
+        .painel-lateral {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .card-info h2 {
+            font-size: 17px;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 8px;
+        }
+
+        .card-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .card-info code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .tabela-atalhos {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .tabela-atalhos td {
+            padding: 8px 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        kbd {
+            background: #1f2937;
+            color: #f8fafc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .box-destaque {
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Navegação Superior -->
+        <nav class="top-nav">
+            <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+            <div class="tag-atividade">IFSC • Avaliação 2 • Atividade 2</div>
+        </nav>
+
+        <header>
+            <h1>Cronômetro de Alta Precisão JS</h1>
+            <p class="subtitulo">
+                Cronômetro com contagem sincronizada pela classe <code>Date</code> do sistema, atualização por <code>setInterval</code>,
+                registro de pausas em lista e atalhos completos de teclado.
+            </p>
+        </header>
+
+        <div class="grid-conteudo">
+            <!-- Painel Principal do Cronômetro -->
+            <main class="card-cronometro">
+                <div class="display-cronometro">
+                    <div class="tempo-principal">
+                        <span id="tempoHoras">00</span>:<span id="tempoMinutos">00</span>:<span id="tempoSegundos">00</span>.<span class="tempo-milis" id="tempoMilis">00</span>
+                    </div>
+                    <div id="statusBadge" class="status-badge">Parado</div>
+                </div>
+
+                <!-- Botões de Controle -->
+                <div class="controles-cronometro">
+                    <button type="button" id="btnIniciar" class="btn-acao btn-iniciar">
+                        ▶ Iniciar <small>(Espaço)</small>
+                    </button>
+                    <button type="button" id="btnPausar" class="btn-acao btn-pausar" disabled>
+                        ⏸ Pausar <small>(Espaço)</small>
+                    </button>
+                    <button type="button" id="btnVolta" class="btn-acao btn-volta" disabled>
+                        ⏱ Marcar Pausa <small>(V)</small>
+                    </button>
+                    <button type="button" id="btnParar" class="btn-acao btn-parar" disabled>
+                        ⏹ Zerar <small>(Z / Esc)</small>
+                    </button>
+                </div>
+
+                <!-- Lista de Pausas Registradas -->
+                <div class="historico-container">
+                    <div class="historico-topo">
+                        <h3>Registros de Pausa (<span id="totalPausas">0</span>)</h3>
+                        <button type="button" id="btnLimparHistorico" class="btn-limpar-historico">Limpar Lista</button>
+                    </div>
+                    <ul class="lista-pausas" id="listaPausas">
+                        <li class="sem-pausas" id="msgSemPausas">Nenhuma pausa registrada ainda.</li>
+                    </ul>
+                </div>
+            </main>
+
+            <!-- Painel Lateral: Requisitos e Explicação Teórica -->
+            <aside class="painel-lateral">
+                <div class="card-info">
+                    <h2><span>🧠</span> Precisão Temporal com Date</h2>
+                    <p>
+                        Conforme a observação da disciplina: o <code>setInterval</code> do JavaScript sofre de <em>timer drift</em> (atrasos acumulativos por renderização ou economia de energia em abas inativas).
+                    </p>
+                    <div class="box-destaque">
+                        <strong>Solução implementada:</strong>
+                        O tempo não é simplesmente incrementado. Calculamos a diferença absoluta entre o timestamp da hora do sistema (<code>Date.now()</code>) e o momento inicial, garantindo precisão real sem perdas de milissegundos.
+                    </div>
+                </div>
+
+                <div class="card-info">
+                    <h2><span>⌨️</span> Atalhos de Teclado</h2>
+                    <p>Você pode controlar todo o cronômetro sem usar o mouse:</p>
+                    <table class="tabela-atalhos">
+                        <tr>
+                            <td><kbd>Espaço</kbd></td>
+                            <td>Iniciar ou Pausar a contagem</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>V</kbd> ou <kbd>P</kbd></td>
+                            <td>Registrar pausa / volta na lista</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Z</kbd> ou <kbd>Esc</kbd></td>
+                            <td>Zerar / Parar o cronômetro</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card-info">
+                    <h2><span>📋</span> Requisitos da Atividade</h2>
+                    <p>✓ Iniciar, pausar e parar cronômetro.</p>
+                    <p>✓ Cada pausa registrada em lista exibida ao usuário.</p>
+                    <p>✓ Hora do sistema obtida com a classe <code>Date</code>.</p>
+                    <p>✓ Atualização de interface com <code>setInterval</code>.</p>
+                    <p>✓ Atalhos de teclado funcionais e documentados.</p>
+                </div>
+            </aside>
+        </div>
+
+        <footer>
+            IFSC • Câmpus Lages • Disciplina: Programação para Internet I • Prof. Romulo Beninca • Alunos: Cleiton Paes | Izaque Carlos
+        </footer>
+    </div>
+
+    <!-- Script do Cronômetro -->
+    <script>
+        /**
+         * Módulo do Cronômetro de Alta Precisão
+         * Baseado em timestamps reais de Date.now() para imunidade ao timer drift do navegador.
+         */
+        document.addEventListener("DOMContentLoaded", () => {
+            // Elementos do DOM
+            const spanHoras = document.getElementById("tempoHoras");
+            const spanMinutos = document.getElementById("tempoMinutos");
+            const spanSegundos = document.getElementById("tempoSegundos");
+            const spanMilis = document.getElementById("tempoMilis");
+            const statusBadge = document.getElementById("statusBadge");
+
+            const btnIniciar = document.getElementById("btnIniciar");
+            const btnPausar = document.getElementById("btnPausar");
+            const btnVolta = document.getElementById("btnVolta");
+            const btnParar = document.getElementById("btnParar");
+
+            const listaPausas = document.getElementById("listaPausas");
+            const totalPausasSpan = document.getElementById("totalPausas");
+            const btnLimparHistorico = document.getElementById("btnLimparHistorico");
+            const msgSemPausas = document.getElementById("msgSemPausas");
+
+            // Variáveis de estado
+            let idIntervalo = null;
+            let tempoInicio = 0;              // Timestamp de início da rodada atual
+            let tempoDecorridoAcumulado = 0;  // Milissegundos acumulados antes da última pausa
+            let estaRodando = false;
+            let contadorPausas = 0;
+            let historicoPausas = [];
+
+            /**
+             * Formata números para terem no mínimo 2 dígitos com zero à esquerda
+             */
+            function padZero(num, digitos = 2) {
+                return num.toString().padStart(digitos, "0");
+            }
+
+            /**
+             * Converte milissegundos totais em objeto formatado {horas, minutos, segundos, centesimos}
+             */
+            function decomporTempo(msTotal) {
+                const totalSegundos = Math.floor(msTotal / 1000);
+                const horas = Math.floor(totalSegundos / 3600);
+                const minutos = Math.floor((totalSegundos % 3600) / 60);
+                const segundos = totalSegundos % 60;
+                // Exibe centésimos (00 a 99)
+                const centesimos = Math.floor((msTotal % 1000) / 10);
+
+                return {
+                    horas: padZero(horas),
+                    minutos: padZero(minutos),
+                    segundos: padZero(segundos),
+                    milis: padZero(centesimos)
+                };
+            }
+
+            /**
+             * Atualiza visualmente o display do cronômetro
+             */
+            function atualizarDisplay(msTotal) {
+                const tempo = decomporTempo(msTotal);
+                spanHoras.textContent = tempo.horas;
+                spanMinutos.textContent = tempo.minutos;
+                spanSegundos.textContent = tempo.segundos;
+                spanMilis.textContent = tempo.milis;
+            }
+
+            /**
+             * Retorna a string do tempo formatado
+             */
+            function obterTempoFormatado(msTotal) {
+                const t = decomporTempo(msTotal);
+                return `${t.horas}:${t.minutos}:${t.segundos}.${t.milis}`;
+            }
+
+            /**
+             * Ciclo de atualização disparado pelo setInterval:
+             * Calcula o tempo decorrido usando a data real do sistema (Date.now())
+             */
+            function tick() {
+                const agora = Date.now();
+                const tempoTotal = (agora - tempoInicio) + tempoDecorridoAcumulado;
+                atualizarDisplay(tempoTotal);
+            }
+
+            /**
+             * Inicia a contagem do cronômetro
+             */
+            function iniciarCronometro() {
+                if (estaRodando) return;
+
+                tempoInicio = Date.now();
+                estaRodando = true;
+
+                // Intervalo de ~20ms para atualização fluida do mostrador em 50fps
+                idIntervalo = setInterval(tick, 20);
+
+                statusBadge.textContent = "Em Execução";
+                statusBadge.className = "status-badge rodando";
+
+                btnIniciar.disabled = true;
+                btnPausar.disabled = false;
+                btnVolta.disabled = false;
+                btnParar.disabled = false;
+            }
+
+            /**
+             * Pausa a contagem e registra na lista de pausas
+             */
+            function pausarCronometro() {
+                if (!estaRodando) return;
+
+                const agora = Date.now();
+                tempoDecorridoAcumulado += (agora - tempoInicio);
+                clearInterval(idIntervalo);
+                idIntervalo = null;
+                estaRodando = false;
+
+                atualizarDisplay(tempoDecorridoAcumulado);
+
+                statusBadge.textContent = "Pausado";
+                statusBadge.className = "status-badge pausado";
+
+                btnIniciar.disabled = false;
+                btnPausar.disabled = true;
+
+                // Registra a pausa na lista automaticamente
+                registrarPausa("Pausa");
+            }
+
+            /**
+             * Registra uma pausa ou marcação na lista visual
+             */
+            function registrarPausa(tipo = "Pausa") {
+                const msTotal = estaRodando
+                    ? (Date.now() - tempoInicio) + tempoDecorridoAcumulado
+                    : tempoDecorridoAcumulado;
+
+                if (msTotal === 0 && !estaRodando) return;
+
+                contadorPausas++;
+                const horaSistema = new Date().toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                });
+
+                const tempoStr = obterTempoFormatado(msTotal);
+
+                const itemPausa = {
+                    numero: contadorPausas,
+                    hora: horaSistema,
+                    tempo: tempoStr,
+                    tipo: tipo
+                };
+
+                historicoPausas.unshift(itemPausa);
+                renderizarHistorico();
+            }
+
+            /**
+             * Renderiza a lista de pausas no HTML
+             */
+            function renderizarHistorico() {
+                totalPausasSpan.textContent = historicoPausas.length;
+
+                if (historicoPausas.length === 0) {
+                    listaPausas.innerHTML = '<li class="sem-pausas" id="msgSemPausas">Nenhuma pausa registrada ainda.</li>';
+                    return;
+                }
+
+                listaPausas.innerHTML = historicoPausas.map(p => `
+                    <li class="item-pausa">
+                        <span class="num-pausa">#${padZero(p.numero)} [${p.tipo}]</span>
+                        <span class="hora-sistema">Registrado às ${p.hora}</span>
+                        <span class="tempo-pausa">${p.tempo}</span>
+                    </li>
+                `).join("");
+            }
+
+            /**
+             * Para e zera o cronômetro
+             */
+            function pararCronometro() {
+                clearInterval(idIntervalo);
+                idIntervalo = null;
+                estaRodando = false;
+                tempoInicio = 0;
+                tempoDecorridoAcumulado = 0;
+
+                atualizarDisplay(0);
+
+                statusBadge.textContent = "Parado";
+                statusBadge.className = "status-badge";
+
+                btnIniciar.disabled = false;
+                btnPausar.disabled = true;
+                btnVolta.disabled = true;
+                btnParar.disabled = true;
+            }
+
+            /**
+             * Limpa o histórico de pausas
+             */
+            function limparHistorico() {
+                historicoPausas = [];
+                contadorPausas = 0;
+                renderizarHistorico();
+            }
+
+            // Ouvintes de Clique
+            btnIniciar.addEventListener("click", iniciarCronometro);
+            btnPausar.addEventListener("click", pausarCronometro);
+            btnVolta.addEventListener("click", () => registrarPausa("Marcação"));
+            btnParar.addEventListener("click", pararCronometro);
+            btnLimparHistorico.addEventListener("click", limparHistorico);
+
+            // Gerenciador de Atalhos de Teclado
+            window.addEventListener("keydown", (evento) => {
+                // Não dispara atalhos se o foco estiver em inputs de texto
+                if (evento.target.tagName === "INPUT" || evento.target.tagName === "TEXTAREA") return;
+
+                if (evento.code === "Space") {
+                    evento.preventDefault();
+                    if (estaRodando) {
+                        pausarCronometro();
+                    } else {
+                        iniciarCronometro();
+                    }
+                } else if (evento.key.toLowerCase() === "z" || evento.key === "Escape") {
+                    evento.preventDefault();
+                    pararCronometro();
+                } else if (evento.key.toLowerCase() === "v" || evento.key.toLowerCase() === "p") {
+                    evento.preventDefault();
+                    if (estaRodando) {
+                        registrarPausa("Marcação");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+
